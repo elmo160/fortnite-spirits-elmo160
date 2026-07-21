@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sprite Checklist - Summer Season Panel</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.41.0/html2canvas.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,600;0,700;0,800;0,900;1,800&display=swap');
+        :root {
+            --bg-gradient: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #a1c4fd 100%);
+            --panel-bg: rgba(255, 255, 255, 0.9);
+            --panel-border: rgba(255, 255, 255, 0.5);
+            --modal-bg: rgba(255, 255, 255, 0.95);
+            --text-color: #2d3748;
+            --text-muted: #718096;
+            --rarity-rare: #0284c7;
+            --rarity-epic: #9333ea;
+            --rarity-legendary: #e56a00;
+            --rarity-mythic: #ca9626;
+            
+            /* Paleta personalizada */
+            --bg-variant-gold: radial-gradient(circle at center, #ffe082 0%, #ffb300 40%, #8d6e63 75%, #4e342e 100%);
+            --bg-variant-gummy: linear-gradient(135deg, #ff8da1, #8effa1);
+            --bg-variant-galaxy: radial-gradient(circle at center, #bf55ec 0%, #5333ed 45%, #120024 85%, #05000a 100%);
+            --bg-variant-holo: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 50%, #fbc2eb 100%);
+            --bg-variant-gem: linear-gradient(135deg, #ffffff 0%, #dbe7f2 60%, #b5cbde 100%);
+            --bg-variant-cube: radial-gradient(circle at center, #6a1b9a 0%, #3a005c 40%, #120024 80%, #05000a 100%);
+            --bg-variant-quack: linear-gradient(135deg, #ffffff 0%, #e0c3fc 50%, #8ec5fc 100%);
+
+            /* Escala de Zoom dinámica */
+            --card-scale: 1;
+        }
+        
+        .icon-small { width: 18px; height: 18px; vertical-align: middle; object-fit: contain; }
+        .icon-medium { width: 24px; height: 24px; vertical-align: middle; object-fit: contain; }
+        .icon-large { width: 32px; height: 32px; vertical-align: middle; object-fit: contain; }
+        
+        body { background: var(--bg-gradient); color: var(--text-color); font-family: 'Poppins', sans-serif; margin: 0; padding: 15px; min-height: 100vh; font-size: 11px; }
+        .top-utility-bar { display: flex; justify-content: flex-end; align-items: center; margin-bottom: 8px; }
+        .right-utility-cluster { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.6); padding: 5px 10px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.8); }
+        .lang-select { font-family: 'Poppins', sans-serif; padding: 5px 12px; border-radius: 16px; border: 2px solid #ffffff; font-size: 11px; font-weight: 800; cursor: pointer; outline: none; transition: all 0.3s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        
+        .hero-header { background: var(--panel-bg); border: 1px solid var(--panel-border); border-radius: 10px; padding: 18px 22px; display: flex; flex-direction: column; gap: 15px; backdrop-filter: blur(8px); margin-bottom: 12px; box-shadow: 0 6px 12px rgba(0,0,0,0.1); }
+        .header-top-zone { display: flex; justify-content: space-between; align-items: center; }
+        .brand-zone h1 { margin: 0; font-size: 44px; font-weight: 900; letter-spacing: -0.5px; background: linear-gradient(45deg, #ff416c, #ff4b2b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .brand-zone p { margin: 4px 0 0 0; font-size: 12px; color: #4a5568; }
+        .stats-wrapper { display: flex; gap: 10px; align-items: center; }
+        .stat-card { background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%); border: 1px solid #e2e8f0; padding: 10px 14px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); display: flex; flex-direction: column; gap: 4px; }
+        .stat-card label { display: flex; align-items: center; gap: 6px; font-size: 10px; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px; }
+        .dust-input, .epic-input { font-family: 'Poppins', sans-serif; background: #ffffff; border: 1px solid #cbd5e1; font-size: 14px; font-weight: 700; border-radius: 6px; padding: 5px 10px; outline: none; }
+        .dust-input { width: 110px; text-align: right; color: #f472b6 !important; background: #fffdf2; }
+        .epic-input { width: 150px; color: #0f172a; }
+        .value-required { font-size: 18px; font-weight: 800; color: #ca9626 !important; padding: 2px 0; }
+        
+        .key-panel { background: rgba(248, 250, 252, 0.8); border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 10px; font-size: 12px; }
+        .key-row { display: flex; align-items: center; flex-wrap: wrap; gap: 16px; }
+        .key-title { font-weight: 700; color: #0f172a; min-width: 45px; text-transform: uppercase; font-size: 10px; }
+        .key-item { display: flex; align-items: center; gap: 6px; font-weight: 600; }
+        .key-box-sample { padding: 1px 4px; background: #fff; border: 1px solid #cbd5e1; border-radius: 3px; font-size: 9px; font-weight: bold; }
+        .rarity-sample { width: 8px; height: 8px; border-radius: 50%; }
+        
+        .level-sample {
+            background: #ffffff !important; color: #0f172a !important;
+            padding: 2px 8px; font-size: 9px; font-weight: 900; font-style: italic;
+            border: 1.5px solid #475569; border-radius: 3px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.12);
+            clip-path: polygon(0 0, 100% 0, 85% 100%, 0 100%);
+            border-bottom: 2.5px solid #3b82f6;
+        }
+
+        .info-lock-box { width: 22px; height: 22px; background: #2d3748; border: 1px solid #cbd5e1; border-radius: 4px; display: flex; align-items: center; justify-content: center; position: relative; }
+        
+        .mid-row-container { display: grid; grid-template-columns: 500px 1fr; gap: 12px; margin-bottom: 12px; align-items: stretch; }
+        @media (max-width: 1024px) { .mid-row-container { grid-template-columns: 1fr; } }
+
+        .collection-summer-container { background: var(--panel-bg); border: 1px solid var(--panel-border); border-radius: 10px; padding: 16px 24px; display: flex; flex-direction: column; justify-content: center; gap: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .collection-summer-container > div { display: flex; flex-direction: column; align-items: center; width: 100%; }
+        
+        .bar-header { display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 12px; width: 100%; }
+        .progress-bar-container { width: 100%; height: 12px; background: #e2e8f0; border-radius: 6px; overflow: hidden; margin-top: 6px; }
+        .progress-fill { height: 100%; width: 0%; transition: width 0.3s ease; }
+        .collection-fill { background: linear-gradient(90deg, #3b82f6, #06b6d4); }
+        .mastered-fill { background: linear-gradient(90deg, #f59e0b, #10b981); }
+        
+        .summon-cost-outside-panel { background: var(--panel-bg); border: 1px solid var(--panel-border); border-radius: 10px; padding: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: center; }
+        .summon-panel-title { font-weight: 800; font-size: 12px; color: #1a202c; margin-bottom: 12px; text-transform: uppercase; display: flex; align-items: center; gap: 6px; justify-content: center; }
+        .summon-info-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px 20px; font-size: 11px; }
+        .summon-column { display: flex; flex-direction: column; gap: 6px; }
+        .summon-info-item { display: flex; justify-content: space-between; border-bottom: 1px solid #cbd5e1; padding-bottom: 4px; font-weight: 600; }
+        .summon-info-item .cost-val { font-weight: 700; color: #4a5568; }
+        
+        .embedded-action-zone { display: flex; align-items: center; justify-content: flex-start; gap: 8px; margin-top: 8px; margin-bottom: 12px; background: rgba(255, 255, 255, 0.4); padding: 10px; border-radius: 14px; backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.5); flex-wrap: wrap; }
+        .gamer-select, .gamer-btn { font-family: inherit; font-size: 11px; font-weight: 800; padding: 8px 16px; border-radius: 24px; cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); display: inline-flex; align-items: center; gap: 6px; outline: none; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .gamer-select { background: #ffffff; border: 2px solid #cbd5e1; color: #1e293b; padding: 7px 14px; }
+        .gamer-select:hover { border-color: #94a3b8; transform: translateY(-1px); }
+        .gamer-btn.btn-text { background: #ffffff; border: 2px solid #3b82f6; color: #2563eb; }
+        .gamer-btn.btn-text:hover { background: #eff6ff; transform: translateY(-1px); }
+        .gamer-btn.btn-download { background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); border: none; color: white; }
+        
+        .zoom-cluster { display: inline-flex; align-items: center; background: #ffffff; border: 2px solid #cbd5e1; border-radius: 24px; padding: 2px 6px; gap: 4px; font-weight: 800; }
+        .zoom-btn { background: transparent; border: none; font-weight: 900; font-size: 13px; cursor: pointer; padding: 4px 8px; color: #334155; border-radius: 12px; }
+        .zoom-btn:hover { background: #f1f5f9; color: #2563eb; }
+        .zoom-val { font-size: 11px; color: #475569; min-width: 42px; text-align: center; }
+
+        .gamer-btn.btn-admin-owned { background: linear-gradient(135deg, #10b981 0%, #059669 100%); border: none; color: white; margin-left: auto; }
+        .gamer-btn.btn-admin-owned:hover { background: linear-gradient(135deg, #34d399 0%, #10b981 100%); }
+        .gamer-btn.btn-admin-master { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); border: none; color: white; }
+        .gamer-btn.btn-admin-reset { background: linear-gradient(135deg, #f87171 0%, #ef4444 100%); border: none; color: white; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3); }
+        .gamer-btn.btn-admin-reset:hover { background: linear-gradient(135deg, #fca5a5 0%, #f87171 100%); transform: translateY(-1px); }
+        
+        /* Grid Escalable */
+        .content-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(calc(320px * var(--card-scale)), 1fr)); gap: 15px; transition: all 0.2s ease; }
+        
+        .sprite-card-block { 
+            zoom: var(--card-scale);
+            background: rgba(255, 255, 255, 0.5); border: 1px solid var(--panel-border); 
+            border-radius: 10px; padding: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); 
+            display: flex; flex-direction: column; gap: 8px; 
+        }
+        .sprite-card-header { display: flex; justify-content: space-between; align-items: center; font-size: 15px; font-weight: 800; color: #0f172a; border-left: 4px solid var(--sprite-rarity, #cbd5e1); padding-left: 6px; }
+        .card-mini-actions { display: flex; gap: 4px; align-items: center; }
+        .mini-btn { font-family: inherit; font-size: 11px; width: 24px; height: 24px; border-radius: 5px; cursor: pointer; outline: none; display: inline-flex; justify-content: center; align-items: center; padding: 0; transition: all 0.2s ease; }
+        .mini-btn .icon-small { width: 14px; height: 14px; }
+        
+        .mini-btn-own { background: linear-gradient(135deg, #10b981 0%, #059669 100%); border: none; color: white; box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3); }
+        .mini-btn-master { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); border: none; color: white; box-shadow: 0 2px 4px rgba(245,158,11,0.3); }
+        .mini-btn-reset { background: linear-gradient(135deg, #f87171 0%, #ef4444 100%); border: none; color: white; box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3); }
+
+        .sprite-matrix { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+        
+        .sprite-matrix.fixed-grid .slot-box[data-variant="Normal"] { grid-column: 1; }
+        .sprite-matrix.fixed-grid .slot-box[data-variant="Gold"]   { grid-column: 2; }
+        .sprite-matrix.fixed-grid .slot-box[data-variant="Gummy"]  { grid-column: 3; }
+        .sprite-matrix.fixed-grid .slot-box[data-variant="Galaxy"] { grid-column: 4; }
+        .sprite-matrix.fixed-grid .slot-box[data-variant="Holo"]   { grid-column: 1; }
+        .sprite-matrix.fixed-grid .slot-box[data-variant="Cube"]   { grid-column: 2; }
+        .sprite-matrix.fixed-grid .slot-box[data-variant="Gem"]    { grid-column: 3; }
+        .sprite-matrix.fixed-grid .slot-box[data-variant="Quack"]  { grid-column: 4; }
+
+        .sprite-matrix.flow-grid .slot-box { grid-column: auto !important; }
+
+        .slot-box { aspect-ratio: 1 / 1; border: 1px solid #cbd5e1; border-radius: 4px; position: relative; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.15s; overflow: hidden; background: #fff; }
+        .slot-box:not(.blocked):not(.unavailable):not(.invisible-space):hover { transform: scale(1.04); z-index: 2; border-color: #2b6cb0; }
+        
+        /* Fondos y bordes de variantes */
+        .slot-box[data-owned="true"][data-variant="Gold"]:not(.blocked) { background: var(--bg-variant-gold); border-color: #ffb300; }
+        .slot-box[data-owned="true"][data-variant="Gummy"]:not(.blocked) { background: var(--bg-variant-gummy); border-color: #ec4899; }
+        .slot-box[data-owned="true"][data-variant="Galaxy"]:not(.blocked) { background: var(--bg-variant-galaxy); border-color: #bf55ec; color: white; }
+        .slot-box[data-owned="true"][data-variant="Holo"]:not(.blocked) { background: var(--bg-variant-holo); border-color: #8ec5fc; }
+        .slot-box[data-owned="true"][data-variant="Gem"]:not(.blocked) { background: var(--bg-variant-gem); border-color: #00b4d8; }
+        .slot-box[data-owned="true"][data-variant="Cube"]:not(.blocked) { background: var(--bg-variant-cube); border-color: #9333ea; color: white; }
+        .slot-box[data-owned="true"][data-variant="Quack"]:not(.blocked) { background: var(--bg-variant-quack); border-color: #b87cf8; }
+        
+        /* Fondos Normales con Gradientes Específicos por Rareza */
+        .slot-box[data-owned="true"][data-variant="Normal"][data-rarity-origin="Rare"]:not(.blocked) { background: linear-gradient(135deg, #ffffff 0%, #38bdf8 45%, #0284c7 100%) !important; border-color: var(--rarity-rare); }
+        .slot-box[data-owned="true"][data-variant="Normal"][data-rarity-origin="Epic"]:not(.blocked) { background: linear-gradient(135deg, #ffffff 0%, #c084fc 45%, #7e22ce 100%) !important; border-color: var(--rarity-epic); }
+        .slot-box[data-owned="true"][data-variant="Normal"][data-rarity-origin="Legendary"]:not(.blocked) { background: linear-gradient(135deg, #ffffff 0%, #ffb74d 45%, #e65100 100%) !important; border-color: var(--rarity-legendary); }
+        .slot-box[data-owned="true"][data-variant="Normal"][data-rarity-origin="Mythic"]:not(.blocked) { background: linear-gradient(135deg, #ffffff 0%, #ffe082 45%, #ca9626 100%) !important; border-color: var(--rarity-mythic); }
+        
+        .slot-box.single-variant-disabled { display: none !important; }
+
+        .slot-box.unavailable:not(.show-all-placeholder) { display: none !important; }
+        .slot-box.unavailable.show-all-placeholder { background: #f1f5f9 !important; border: 1px solid #cbd5e1 !important; opacity: 0.65; }
+        
+        .slot-box.blocked { background: transparent !important; cursor: not-allowed !important; border: 1px dashed rgba(203, 213, 225, 0.8) !important; box-shadow: none !important; }
+        .slot-box.blocked .slot-inner { opacity: 0.5 !important; filter: none !important; } 
+        .blocked-overlay { position: absolute; bottom: 3px; right: 3px; z-index: 5; opacity: 0.8; width: 14px; height: 14px; }
+        
+        .slot-box.not-owned:not(.blocked):not(.unavailable) { background: #222533 !important; border-color: #3b4259 !important; }
+        .slot-box.not-owned:not(.blocked):not(.unavailable) .slot-inner img { filter: brightness(0.6) contrast(1.1) !important; opacity: 0.85 !important; }
+        .slot-box.not-owned .level-badge, .slot-box.not-owned .mini-crown { display: none !important; }
+        
+        .slot-box.needs-summon:not(.blocked) { border-color: #94a3b8 !important; background: linear-gradient(135deg, #4a5568, #2d3748) !important; }
+        .slot-box.needs-summon:not(.blocked) .slot-inner { filter: brightness(0.6) grayscale(0.2) !important; }
+        
+        .slot-box.has-crown::after {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            box-shadow: inset 0 0 12px 2px rgba(234, 179, 8, 0.7); border-radius: 3px; pointer-events: none; z-index: 4;
+        }
+
+        .slot-inner { width: 95%; height: 95%; display: flex; align-items: center; justify-content: center; z-index: 1; }
+        .slot-inner img { width: 95%; height: 95%; object-fit: contain; }
+        
+        /* Etiquetas de variantes con colores perfeccionados */
+        .variant-tag { position: absolute; top: 3px; left: 3px; font-size: 8px; font-weight: 800; text-transform: uppercase; padding: 1px 4px; border-radius: 2px; z-index: 4; color: #ffffff; text-shadow: 0 1px 2px rgba(0,0,0,0.6); }
+        .slot-box[data-rarity-origin="Rare"] .variant-tag { background: var(--rarity-rare); }
+        .slot-box[data-rarity-origin="Epic"] .variant-tag { background: var(--rarity-epic); }
+        .slot-box[data-rarity-origin="Legendary"] .variant-tag { background: var(--rarity-legendary); }
+        .slot-box[data-rarity-origin="Mythic"] .variant-tag { background: var(--rarity-mythic); }
+        .slot-box[data-variant="Gold"] .variant-tag { background: #d97706 !important; }
+        .slot-box[data-variant="Gummy"] .variant-tag { background: #ec4899 !important; }
+        .slot-box[data-variant="Galaxy"] .variant-tag { background: #5333ed !important; }
+        .slot-box[data-variant="Holo"] .variant-tag { background: #2dd4bf !important; color: #ffffff !important; }
+        .slot-box[data-variant="Gem"] .variant-tag { background: #00b4d8 !important; color: #ffffff !important; }
+        .slot-box[data-variant="Cube"] .variant-tag { background: #9333ea !important; color: #ffffff !important; }
+        .slot-box[data-variant="Quack"] .variant-tag { background: #b87cf8 !important; color: #ffffff !important; }
+        
+        .mini-crown { position: absolute; top: 3px; right: 3px; display: none; z-index: 5; width: 14px; height: 14px; }
+        .mini-crown img { width: 100%; height: 100%; object-fit: contain; }
+        .slot-box.has-crown .mini-crown { display: block; }
+
+        /* Insignia de Nivel Limpia */
+        .level-badge { 
+            position: absolute; bottom: 0px; left: 0px; 
+            background: #ffffff !important; color: #0f172a !important;
+            padding: 1px 6px 2px 4px; font-size: 8px; font-weight: 900; 
+            font-style: italic; z-index: 3; 
+            clip-path: polygon(0 0, 100% 0, 85% 100%, 0 100%); 
+            line-height: 1.1; white-space: nowrap;
+            border-bottom: 2.5px solid #cbd5e1;
+        }
+
+        .slot-box.blocked .level-badge,
+        .slot-box.unavailable .level-badge {
+            display: none !important;
+        }
+
+        .slot-box:not([data-variant="Normal"]) .level-badge {
+            border-bottom: 2.5px solid #ec4899;
+            border-image: linear-gradient(90deg, #ff4e50, #f9d423, #00ff00, #00d2ff) 1;
+        }
+
+        .slot-box[data-variant="Normal"][data-rarity-origin="Rare"] .level-badge { border-bottom: 2.5px solid var(--rarity-rare); }
+        .slot-box[data-variant="Normal"][data-rarity-origin="Epic"] .level-badge { border-bottom: 2.5px solid var(--rarity-epic); }
+        .slot-box[data-variant="Normal"][data-rarity-origin="Legendary"] .level-badge { border-bottom: 2.5px solid var(--rarity-legendary); }
+        .slot-box[data-variant="Normal"][data-rarity-origin="Mythic"] .level-badge { border-bottom: 2.5px solid var(--rarity-mythic); }
+
+        .slot-box.needs-summon .level-badge { font-size: 7.5px; padding: 1px 4px 1px 2px; letter-spacing: -0.3px; background: #fef08a !important; color: #1e293b !important; border-bottom: none !important; }
+
+        .hide-completely { display: none !important; }
+        .hide-card-completely { display: none !important; }
+        .invisible-space { visibility: hidden !important; pointer-events: none !important; }
+
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(8px); display: none; justify-content: center; align-items: center; z-index: 999; }
+        .modal-container-relative { position: relative; display: flex; align-items: flex-start; }
+        .modal-card { background: var(--modal-bg); color: #1e293b; width: 340px; border-radius: 16px; padding: 22px; display: flex; flex-direction: column; gap: 18px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); border: 1px solid rgba(255,255,255,0.7); }
+        .modal-header { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; }
+        .modal-title-zone { display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; }
+        .modal-avatar { width: 56px; height: 56px; background: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: 1px solid #e2e8f0; }
+        .modal-avatar img { width: 90%; height: 90%; object-fit: contain; }
+        .modal-name-details { display: flex; flex-direction: column; align-items: center; }
+        .modal-name-details h3 { margin: 0; font-size: 18px; font-weight: 800; color: #0f172a; }
+        .modal-rarity-badge { margin-top: 4px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+        .close-modal-btn { position: absolute; top: -10px; right: -10px; background: #ffffff; border: 1px solid #e2e8f0; color: #64748b; cursor: pointer; font-size: 12px; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); font-weight: bold; z-index: 1000; }
+        
+        .modal-section-title { font-size: 10px; text-transform: uppercase; color: #64748b; font-weight: 800; letter-spacing: 0.5px; text-align: center; }
+        .modal-row-options { display: flex; gap: 10px; align-items: center; justify-content: center; }
+        .btn-opt { font-family: 'Poppins', sans-serif; background: #ffffff; border: 1px solid #cbd5e1; color: #334155; cursor: pointer; font-weight: 700; font-size: 14px; text-align: center; transition: all 0.15s ease; }
+        .btn-opt.lvl-btn { width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
+        .btn-opt.lvl-btn.active { background: #2563eb; color: white; border-color: #1d4ed8; box-shadow: 0 4px 10px rgba(37,99,235,0.3); }
+        .btn-opt.crown-opt { width: 44px; height: 36px; border-radius: 12px; background: #ffffff; display: flex; align-items: center; justify-content: center; }
+        .btn-opt.crown-opt.active { background: #eab308; border-color: #ca8a04; color: white; box-shadow: 0 4px 10px rgba(234,179,8,0.3); }
+        
+        .modal-bottom-actions { display: flex; gap: 10px; width: 100%; margin-top: 5px; }
+        .toggle-box-row { background: #ffffff; padding: 10px 14px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border: 1px solid #cbd5e1; box-shadow: 0 2px 4px rgba(0,0,0,0.02); flex: 1.2; }
+        .remove-btn { font-family: 'Poppins', sans-serif; background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%); color: white; border: 1px solid #b91c1c; padding: 10px 12px; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 12px; flex: 1; }
+        .close-hint { font-size: 10px; color: #94a3b8; text-align: center; font-style: italic; margin-top: -5px; }
+
+        .export-dialog-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 1000; }
+        .export-dialog { font-family: 'Poppins', sans-serif; background: white; padding: 20px; border-radius: 8px; width: 280px; text-align: center; }
+        .export-opts { display: flex; flex-direction: column; gap: 6px; margin: 15px 0; }
+        .export-opt-btn { font-family: inherit; background: #f7fafc; border: 1px solid #e2e8f0; padding: 8px; border-radius: 6px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <div class="top-utility-bar">
+        <div class="right-utility-cluster">
+            <select class="lang-select" id="langSelect" onchange="changeLanguage(this.value)">
+                <option value="en">🇺🇸 English</option>
+                <option value="es">🇲🇽 Español</option>
+                <option value="de">🇩🇪 Deutsch</option>
+                <option value="fr">🇫🇷 Français</option>
+                <option value="it">🇮🇹 Italiano</option>
+                <option value="pt">🇧🇷 Português</option>
+                <option value="ru">🇷🇺 Русский</option>
+                <option value="ja">🇯🇵 日本語</option>
+                <option value="zh">🇨🇳 中文</option>
+                <option value="ko">🇰🇷 한국어</option>
+                <option value="ar">🇸🇦 العربية</option>
+            </select>
+        </div>
+    </div>
+    
+    <div id="captureArea" class="hero-header">
+        <div class="header-top-zone">
+            <div class="brand-zone">
+                <h1 id="txtTitle">Sprite Checklist</h1>
+                <p id="txtSubTitle">Track your spirits, variants, current levels, dust, and summon state.</p>
+            </div>
+            <div class="stats-wrapper">
+                <div class="stat-card" style="min-width: 160px;">
+                    <label id="lblEpicId" style="color:var(--text-muted);">Epic Games ID (optional) <img src="epic.webp" alt="Epic" class="icon-small"></label>
+                    <input type="text" id="epicIdInput" class="epic-input" placeholder="Enter Epic ID..." oninput="saveToLocalStorage()">
+                </div>
+                <div class="stat-card">
+                    <label id="lblSpriteDust" class="lbl-sprite-dust">Sprite Dust <span style="font-size:9px; color:#94a3b8; font-weight:700;">(⬆/⬇ ±1k)</span> <img src="dust.webp" alt="Dust" class="icon-small"></label>
+                    <input type="text" class="dust-input" id="dustInput" value="0" oninput="handleDustInput(this)" onkeydown="handleDustKeyDown(event, this)">
+                </div>
+                <div class="stat-card">
+                    <label id="lblDustReq" class="lbl-dust-req">Dust Required <img src="dust.webp" alt="Dust" class="icon-small"></label>
+                    <div class="value-required" id="dustRequiredVal">0</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="key-panel">
+            <div class="key-row">
+                <span id="txtInfoTitle" class="key-title">Info:</span>
+                <div class="key-item"><div class="level-sample" id="sampleLvlBadge">Level X</div> <span id="txtKeyLevel">Owned / Current Level</span></div>
+                <div class="key-item"><img src="crown.webp" alt="👑" class="icon-small"> <span id="txtKeyMastered">Mastered Sprite</span></div>
+                <div class="key-item"><img src="red.webp" alt="❌" class="icon-small"> <span id="txtKeyMissing">Missing</span></div>
+                <div class="key-item"><div class="key-box-sample" style="background:#4a5568; color:#fff;">Needs Summon</div> <span id="txtKeyNeedsSummon">Needs Summon / Lost</span></div>
+                
+                <div class="key-item">
+                    <div class="info-lock-box">
+                        <img src="lock.webp" alt="🔒" style="width:12px; height:12px; opacity: 0.9; position: absolute; bottom: 4px; right: 4px;">
+                    </div>
+                    <span id="txtKeyUnavailable" style="opacity:0.8; margin-left: 2px;">Unavailable</span>
+                </div>
+            </div>
+            <div class="key-row" style="border-top: 1px solid #e2e8f0; padding-top: 8px;">
+                <span id="txtRaritiesTitle" class="key-title">Rarities:</span>
+                <div class="key-item"><div class="rarity-sample" style="background: var(--rarity-rare);"></div> <span id="txtRarityRare">Rare</span> <span id="countRare" class="rarity-count">(0/0)</span></div>
+                <div class="key-item"><div class="rarity-sample" style="background: var(--rarity-epic);"></div> <span id="txtRarityEpic">Epic</span> <span id="countEpic" class="rarity-count">(0/0)</span></div>
+                <div class="key-item"><div class="rarity-sample" style="background: var(--rarity-legendary);"></div> <span id="txtRarityLegendary">Legendary</span> <span id="countLegendary" class="rarity-count">(0/0)</span></div>
+                <div class="key-item"><div class="rarity-sample" style="background: var(--rarity-mythic);"></div> <span id="txtRarityMythic">Mythic</span> <span id="countMythic" class="rarity-count">(0/0)</span></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Fila Media Unificada Ampliada -->
+    <div class="mid-row-container">
+        <div class="collection-summer-container">
+            <div>
+                <div class="bar-header">
+                    <span id="txtBarCollection" style="color: #2b6cb0;">Collection Progress</span>
+                    <span id="collectionCountText">0 / 0</span>
+                </div>
+                <div class="progress-bar-container">
+                    <div id="collectionProgressBar" class="progress-fill collection-fill"></div>
+                </div>
+            </div>
+            <div>
+                <div class="bar-header">
+                    <span id="txtBarMastered" style="color: #b45309; display: flex; align-items: center; gap: 6px;"><img src="crown.webp" alt="👑" class="icon-small"> Mastered Sprites</span>
+                    <span id="masteredCountText" style="color:#b45309;">0 / 0</span>
+                </div>
+                <div class="progress-bar-container">
+                    <div id="masteredProgressBar" class="progress-fill mastered-fill"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="summon-cost-outside-panel">
+            <div id="txtSummonTableTitle" class="summon-panel-title"><img src="dust.webp" alt="Dust" class="icon-small"> Summon Cost Reference Table</div>
+            <div class="summon-info-grid">
+                <div class="summon-column">
+                    <div class="summon-info-item" style="color: var(--rarity-rare);"><span id="txtCostRareNorm">Rare Normal</span><span class="cost-val">100 dust</span></div>
+                    <div class="summon-info-item" style="color: var(--rarity-rare);"><span id="txtCostRareVar">Rare Variant (Any)</span><span class="cost-val">4,000 dust</span></div>
+                </div>
+                <div class="summon-column">
+                    <div class="summon-info-item" style="color: var(--rarity-epic);"><span id="txtCostEpicNorm">Epic Normal</span><span class="cost-val">3,000 dust</span></div>
+                    <div class="summon-info-item" style="color: var(--rarity-epic);"><span id="txtCostEpicVar">Epic Variant (Any)</span><span class="cost-val">6,000 dust</span></div>
+                </div>
+                <div class="summon-column">
+                    <div class="summon-info-item" style="color: var(--rarity-legendary);"><span id="txtCostLegNorm">Legendary Normal</span><span class="cost-val">5,000 dust</span></div>
+                    <div class="summon-info-item" style="color: var(--rarity-legendary);"><span id="txtCostLegVar">Legendary Variant (Any)</span><span class="cost-val">10,000 dust</span></div>
+                </div>
+                <div class="summon-column">
+                    <div class="summon-info-item" style="color: var(--rarity-mythic);"><span id="txtCostMythNorm">Mythic Normal</span><span class="cost-val">7,500 dust</span></div>
+                    <div class="summon-info-item" style="color: var(--rarity-mythic);"><span id="txtCostMythVar">Mythic Variant (Any)</span><span class="cost-val">15,000 dust</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="embedded-action-zone">
+        <select id="viewFilterSelect" class="gamer-select" onchange="filterLockerView(this.value)">
+            <option value="all" id="optFilterAll" style="color: #1e293b; font-weight: bold;">🗂️ Show All</option>
+            <option value="available" id="optFilterAvailable" selected style="color: #2563eb; font-weight: bold;">🔓 Show Only Available</option>
+            <option value="owned" id="optFilterOwned" style="color: #059669; font-weight: bold;">✅ Show Only Owned</option>
+            <option value="missing" id="optFilterMissing" style="color: #dc2626; font-weight: bold;">❌ Show Only Missing</option>
+            <option value="unavailable" id="optFilterUnavailable" style="color: #64748b; font-weight: bold;">🔒 Show Only Unavailable</option>
+        </select>
+        
+        <!-- Botones de Zoom -->
+        <div class="zoom-cluster">
+            <button class="zoom-btn" onclick="adjustZoom(-0.25)" title="Zoom Out">🔍 -</button>
+            <span class="zoom-val" id="zoomValText">100%</span>
+            <button class="zoom-btn" onclick="adjustZoom(0.25)" title="Zoom In">🔍 +</button>
+        </div>
+
+        <button id="btnCopyText" class="gamer-btn btn-text" onclick="copyTextCollection()">📋 Copy Text List</button>
+        <button id="btnDownloadImg" class="gamer-btn btn-download" onclick="openExportDialog()">📸 Download Image</button>
+
+        <button id="btnOwnedAll" class="gamer-btn btn-admin-owned" onclick="triggerMassiveAction('own-all')"><img src="green.webp" alt="✅" class="icon-small"> Owned All</button>
+        <button id="btnMasterAll" class="gamer-btn btn-admin-master" onclick="triggerMassiveAction('master-all')"><img src="crown.webp" alt="👑" class="icon-small"> Master All</button>
+        <button id="btnResetAll" class="gamer-btn btn-admin-reset" onclick="triggerMassiveAction('reset-all')"><img src="red.webp" alt="❌" class="icon-small"> Reset All (Missing)</button>
+    </div>
+    
+    <div class="content-grid" id="mainLockerGrid"></div>
+    
+    <div class="modal-overlay" id="editorModal" onclick="handleOutsideClick(event)">
+        <div class="modal-container-relative" onclick="event.stopPropagation()">
+            <button class="close-modal-btn" onclick="closeModal()">✕</button>
+            <div class="modal-card">
+                <div class="modal-header">
+                    <div class="modal-title-zone">
+                        <div class="modal-avatar" id="modalIcon"></div>
+                        <div class="modal-name-details">
+                            <h3 id="modalNameDisplay"></h3>
+                            <div class="modal-rarity-badge" id="modalRarityDisplay"></div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div id="txtModalLevelTitle" class="modal-section-title" style="margin-bottom:8px;">Level / Mastery</div>
+                    <div class="modal-row-options">
+                        <button class="btn-opt lvl-btn" id="lBtn1" onclick="setModalLvl(1)">1</button>
+                        <button class="btn-opt lvl-btn" id="lBtn2" onclick="setModalLvl(2)">2</button>
+                        <button class="btn-opt lvl-btn" id="lBtn3" onclick="setModalLvl(3)">3</button>
+                        <button class="btn-opt lvl-btn" id="lBtn4" onclick="setModalLvl(4)">4</button>
+                        <button class="btn-opt lvl-btn" id="lBtn5" onclick="setModalLvl(5)">5</button>
+                        <button class="btn-opt crown-opt" id="modalCrownBtn" onclick="toggleModalCrown()"><img src="crown.webp" alt="👑" class="icon-small"></button>
+                    </div>
+                </div>
+                <div class="modal-bottom-actions">
+                    <div class="toggle-box-row" onclick="toggleModalSummon()">
+                        <div style="display:flex; align-items:center; gap:6px; font-size:11px; font-weight:600; color: #334155;">
+                            <img src="dust.webp" alt="Dust" style="width:16px; height:16px;"><span id="txtModalNeedsSummon">Needs Summon?</span>
+                        </div>
+                        <input type="checkbox" id="modalSummonCheck" style="pointer-events: none; width: 14px; height: 14px;">
+                    </div>
+                    <button id="btnModalRemove" class="remove-btn" onclick="removeCurrentSprite()">Remove Sprite</button>
+                </div>
+                <div id="txtModalCloseHint" class="close-hint">Click outside the box to close</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="export-dialog-overlay" id="exportOverlay">
+        <div class="export-dialog">
+            <h3 id="txtExportTitle" style="margin:0 0 10px 0;">Download Snapshot</h3>
+            <div class="export-opts">
+                <button id="btnExportAll" class="export-opt-btn" onclick="takeScreenshot('all')">👁️ Export All</button>
+                <button id="btnExportAvail" class="export-opt-btn" style="color:#2563eb;" onclick="takeScreenshot('available')">🔓 Export Available</button>
+                <button id="btnExportOwned" class="export-opt-btn" style="color:#2ecc71;" onclick="takeScreenshot('owned')">✅ Export Owned</button>
+                <button id="btnExportMissing" class="export-opt-btn" style="color:#e74c3c;" onclick="takeScreenshot('missing')">❌ Export Missing</button>
+            </div>
+            <button id="btnExportCancel" class="gamer-btn btn-text" style="width:100%; justify-content:center;" onclick="closeExportDialog()">Cancel</button>
+        </div>
+    </div>
+    
+    <script>
+        const langConfig = {
+            en: { bg: '#0a3161', txt: '#ffffff', border: '#ffffff' },
+            es: { bg: '#006341', txt: '#ffffff', border: '#ce1126' },
+            de: { bg: '#000000', txt: '#ffce00', border: '#dd0000' },
+            fr: { bg: '#002654', txt: '#ffffff', border: '#ed2939' },
+            it: { bg: '#008C45', txt: '#ffffff', border: '#cd212a' },
+            pt: { bg: '#009c3b', txt: '#ffdf00', border: '#002776' },
+            ru: { bg: '#0039a6', txt: '#ffffff', border: '#d52b1e' },
+            ja: { bg: '#ffffff', txt: '#bc002d', border: '#bc002d' },
+            zh: { bg: '#ee1c25', txt: '#ffff00', border: '#ffff00' },
+            ko: { bg: '#ffffff', txt: '#000000', border: '#cd2e3a' },
+            ar: { bg: '#006c35', txt: '#ffffff', border: '#ffffff' }
+        };
+
+        const TRANSLATIONS = {
+            en: {
+                title: "Sprite Checklist", subTitle: "Track your spirits, variants, current levels, dust, and summon state.", epicIdTitle: "Epic Games ID (optional)", epicIdPlaceholder: "Enter Epic ID...", lblSpriteDust: "Sprite Dust", lblDustReq: "Dust Required", infoTitle: "Info:", keyLevel: "Owned / Current Level", keyMastered: "Mastered Sprite", keyMissing: "Missing", keyNeedsSummon: "Needs Summon / Lost", keyUnavailable: "Unavailable", raritiesTitle: "Rarities:", rarityRare: "Rare", rarityEpic: "Epic", rarityLegendary: "Legendary", rarityMythic: "Mythic", barCollection: "Collection Progress", barMastered: "Mastered Sprites", summonTableTitle: "Summon Cost Reference Table", costRareNorm: "Rare Normal", costRareVar: "Rare Variant (Any)", costEpicNorm: "Epic Normal", costEpicVar: "Epic Variant (Any)", costLegNorm: "Legendary Normal", costLegVar: "Legendary Variant (Any)", costMythNorm: "Mythic Normal", costMythVar: "Mythic Variant (Any)", optFilterAll: "🗂️ Show All", optFilterAvailable: "🔓 Show Only Available", optFilterOwned: "✅ Show Only Owned", optFilterMissing: "❌ Show Only Missing", optFilterUnavailable: "🔒 Show Only Unavailable", btnCopyText: "📋 Copy Text List", btnDownloadImg: "📸 Download Image", btnOwnedAll: "Owned All", btnMasterAll: "Master All", btnResetAll: "Reset All (Missing)", modalLevelTitle: "Level / Mastery", modalNeedsSummon: "Needs Summon?", btnModalRemove: "Remove Sprite", modalCloseHint: "Click outside the box to close", exportTitle: "Download Snapshot", btnExportAll: "👁️ Export All", btnExportAvail: "🔓 Export Available", btnExportOwned: "✅ Export Owned", btnExportMissing: "❌ Export Missing", btnExportCancel: "Cancel", levelWord: "Level",
+                variants: { Normal: "Normal", Gold: "Gold", Gummy: "Gummy", Galaxy: "Galaxy", Holo: "Holofoil", Gem: "Gem", Cube: "Cube", Quack: "Quack" },
+                spirits: { water: "Water", earth: "Earth", fire: "Fire", fishy: "Fishy", air: "Air", duck: "Duck", ghost: "Ghost", demon: "Demon", king: "King", striker: "Striker", aura: "Aura", dream: "Dream", punk: "Punk", boss: "Boss", seven: "Seven", peanut: "Burnt Peanut", zp: "Zero Point", grim: "Grim Reaper", batman: "Batman", vini: "Vini Jr.", pollo: "Pollo", john: "John Wick" }
+            },
+            es: {
+                title: "Lista de Espíritus", subTitle: "Lleva el control de tus espíritus, variantes, niveles, polvo y estado de invocación.", epicIdTitle: "ID de Epic Games (opcional)", epicIdPlaceholder: "Ingresa tu ID de Epic...", lblSpriteDust: "Polvo de Espíritu", lblDustReq: "Polvo Requerido", infoTitle: "Info:", keyLevel: "Obtenido / Nivel Actual", keyMastered: "Espíritu Dominado", keyMissing: "Faltante", keyNeedsSummon: "Requiere Invocación / Perdido", keyUnavailable: "No Disponible", raritiesTitle: "Rarezas:", rarityRare: "Raro", rarityEpic: "Épico", rarityLegendary: "Legendario", rarityMythic: "Mítico", barCollection: "Progreso de Colección", barMastered: "Espíritus Dominados", summonTableTitle: "Tabla de Costos de Invocación", costRareNorm: "Raro Normal", costRareVar: "Raro Variante (Cualquiera)", costEpicNorm: "Épico Normal", costEpicVar: "Épico Variante (Cualquiera)", costLegNorm: "Legendario Normal", costLegVar: "Legendario Variante (Cualquiera)", costMythNorm: "Mítico Normal", costMythVar: "Mítico Variante (Cualquiera)", optFilterAll: "🗂️ Mostrar Todo", optFilterAvailable: "🔓 Mostrar Solo Disponibles", optFilterOwned: "✅ Mostrar Solo Obtenidos", optFilterMissing: "❌ Mostrar Solo Faltantes", optFilterUnavailable: "🔒 Mostrar Solo No Disponibles", btnCopyText: "📋 Copiar Lista en Texto", btnDownloadImg: "📸 Descargar Imagen", btnOwnedAll: "Obtener Todos", btnMasterAll: "Dominar Todos", btnResetAll: "Reiniciar Todos (Faltantes)", modalLevelTitle: "Nivel / Dominio", modalNeedsSummon: "¿Requiere Invocación?", btnModalRemove: "Eliminar Espíritu", modalCloseHint: "Haz clic fuera de la caja para cerrar", exportTitle: "Descargar Captura", btnExportAll: "👁️ Exportar Todo", btnExportAvail: "🔓 Exportar Disponibles", btnExportOwned: "✅ Exportar Obtenidos", btnExportMissing: "❌ Exportar Faltantes", btnExportCancel: "Cancelar", levelWord: "Nivel",
+                variants: { Normal: "Normal", Gold: "Dorado", Gummy: "Gominola", Galaxy: "Galaxia", Holo: "Holográfico", Gem: "Gema", Cube: "Cubo", Quack: "Cuac" },
+                spirits: { water: "Agua", earth: "Tierra", fire: "Fuego", fishy: "Pecesito", air: "Aire", duck: "Pato", ghost: "Fantasma", demon: "Demonio", king: "Rey", striker: "Delantero", aura: "Aura", dream: "Sueño", punk: "Punk", boss: "Jefe", seven: "Siete", peanut: "Cacahuate Q.", zp: "Punto Cero", grim: "Sega-Almas", batman: "Batman", vini: "Vini Jr.", pollo: "Pollo", john: "John Wick" }
+            },
+            de: {
+                title: "Geister-Checkliste", subTitle: "Verfolge deine Geister, Varianten, Level, Staub und Beschwörungsstatus.", epicIdTitle: "Epic Games ID (optional)", epicIdPlaceholder: "Epic-ID eingeben...", lblSpriteDust: "Geisterstaub", lblDustReq: "Staub Benötigt", infoTitle: "Info:", keyLevel: "Besessen / Aktuelles Level", keyMastered: "Gemeisterter Geist", keyMissing: "Fehlend", keyNeedsSummon: "Braucht Beschwörung", keyUnavailable: "Nicht verfügbar", raritiesTitle: "Seltenheiten:", rarityRare: "Selten", rarityEpic: "Episch", rarityLegendary: "Legendär", rarityMythic: "Mythisch", barCollection: "Sammlungsfortschritt", barMastered: "Gemeisterte Geister", summonTableTitle: "Beschwörungskosten-Tabelle", costRareNorm: "Selten Normal", costRareVar: "Seltene Variante", costEpicNorm: "Episch Normal", costEpicVar: "Epische Variante", costLegNorm: "Legendär Normal", costLegVar: "Legendäre Variante", costMythNorm: "Mythisch Normal", costMythVar: "Mythische Variante", optFilterAll: "🗂️ Alle anzeigen", optFilterAvailable: "🔓 Nur verfügbare", optFilterOwned: "✅ Nur besessene", optFilterMissing: "❌ Nur fehlende", optFilterUnavailable: "🔒 Nur unverfügbare", btnCopyText: "📋 Textliste kopieren", btnDownloadImg: "📸 Bild herunterladen", btnOwnedAll: "Alle besitzen", btnMasterAll: "Alle meistern", btnResetAll: "Zurücksetzen (Fehlend)", modalLevelTitle: "Level / Meisterschaft", modalNeedsSummon: "Beschwörung nötig?", btnModalRemove: "Geist entfernen", modalCloseHint: "Außerhalb klicken zum Schließen", exportTitle: "Snapshot herunterladen", btnExportAll: "👁️ Alle exportieren", btnExportAvail: "🔓 Verfügbare exportieren", btnExportOwned: "✅ Besessene exportieren", btnExportMissing: "❌ Fehlende exportieren", btnExportCancel: "Abbrechen", levelWord: "Level",
+                variants: { Normal: "Normal", Gold: "Gold", Gummy: "Gummi", Galaxy: "Galaxie", Holo: "Holo", Gem: "Edelstein", Cube: "Würfel", Quack: "Quack" },
+                spirits: { water: "Wasser", earth: "Erde", fire: "Feuer", fishy: "Fischig", air: "Luft", duck: "Ente", ghost: "Geist", demon: "Dämon", king: "König", striker: "Stürmer", aura: "Aura", dream: "Traum", punk: "Punk", boss: "Boss", seven: "Sieben", peanut: "Verbrannte Erdnuss", zp: "Nullpunkt", grim: "Sensenmann", batman: "Batman", vini: "Vini Jr.", pollo: "Pollo", john: "John Wick" }
+            },
+            fr: {
+                title: "Check-list des Esprits", subTitle: "Suivez vos esprits, variantes, niveaux, poussière et état d'invocation.", epicIdTitle: "ID Epic Games (optionnel)", epicIdPlaceholder: "Entrez ID Epic...", lblSpriteDust: "Poussière d'Esprit", lblDustReq: "Poussière Requise", infoTitle: "Info:", keyLevel: "Possédé / Niveau Actuel", keyMastered: "Esprit Maîtrisé", keyMissing: "Manquant", keyNeedsSummon: "Invoc. Nécessaire", keyUnavailable: "Indisponible", raritiesTitle: "Raretés:", rarityRare: "Rare", rarityEpic: "Épique", rarityLegendary: "Légendaire", rarityMythic: "Mythique", barCollection: "Progrès Collection", barMastered: "Esprits Maîtrisés", summonTableTitle: "Tableau de Coût d'Invocation", costRareNorm: "Rare Normal", costRareVar: "Variante Rare", costEpicNorm: "Épique Normal", costEpicVar: "Variante Épique", costLegNorm: "Légendaire Normal", costLegVar: "Variante Légendaire", costMythNorm: "Mythique Normal", costMythVar: "Variante Mythique", optFilterAll: "🗂️ Tout afficher", optFilterAvailable: "🔓 Disponibles uniquem.", optFilterOwned: "✅ Possédés uniquem.", optFilterMissing: "❌ Manquants uniquem.", optFilterUnavailable: "🔒 Indisponibles uniquem.", btnCopyText: "📋 Copier la liste", btnDownloadImg: "📸 Télécharger l'image", btnOwnedAll: "Tous posséder", btnMasterAll: "Tous maîtriser", btnResetAll: "Réinitialiser (Manquants)", modalLevelTitle: "Niveau / Maîtrise", modalNeedsSummon: "Invocation nécessaire ?", btnModalRemove: "Retirer l'esprit", modalCloseHint: "Cliquez à l'extérieur pour fermer", exportTitle: "Télécharger la capture", btnExportAll: "👁️ Tout exporter", btnExportAvail: "🔓 Exporter disponibles", btnExportOwned: "✅ Exporter possédés", btnExportMissing: "❌ Exporter manquants", btnExportCancel: "Annuler", levelWord: "Niveau",
+                variants: { Normal: "Normal", Gold: "Or", Gummy: "Gomme", Galaxy: "Galaxie", Holo: "Holo", Gem: "Gemme", Cube: "Cube", Quack: "Couac" },
+                spirits: { water: "Eau", earth: "Terre", fire: "Feu", fishy: "Poisson", air: "Air", duck: "Canard", ghost: "Fantôme", demon: "Démon", king: "Roi", striker: "Buteur", aura: "Aura", dream: "Rêve", punk: "Punk", boss: "Boss", seven: "Sept", peanut: "Cacahuète Brûlée", zp: "Point Zéro", grim: "Faucheuse", batman: "Batman", vini: "Vini Jr.", pollo: "Pollo", john: "John Wick" }
+            },
+            it: {
+                title: "Checklist Spiriti", subTitle: "Traccia i tuoi spiriti, varianti, livelli, polvere e stato evocazione.", epicIdTitle: "ID Epic Games (opzionale)", epicIdPlaceholder: "Inserisci ID Epic...", lblSpriteDust: "Polvere di Spirito", lblDustReq: "Polvere Richiesta", infoTitle: "Info:", keyLevel: "Posseduto / Livello Attuale", keyMastered: "Spirito Dominato", keyMissing: "Mancante", keyNeedsSummon: "Evocazione Necessaria", keyUnavailable: "Non disponibile", raritiesTitle: "Rarità:", rarityRare: "Raro", rarityEpic: "Epico", rarityLegendary: "Leggendario", rarityMythic: "Mitico", barCollection: "Progresso Collezione", barMastered: "Spiriti Dominati", summonTableTitle: "Tabella Costo Evocazione", costRareNorm: "Raro Normale", costRareVar: "Variante Rara", costEpicNorm: "Epico Normale", costEpicVar: "Variante Epica", costLegNorm: "Leggendario Normale", costLegVar: "Variante Leggendaria", costMythNorm: "Mitico Normale", costMythVar: "Variante Mitica", optFilterAll: "🗂️ Mostra Tutto", optFilterAvailable: "🔓 Solo Disponibili", optFilterOwned: "✅ Solo Posseduti", optFilterMissing: "❌ Solo Mancanti", optFilterUnavailable: "🔒 Solo Non Disponibili", btnCopyText: "📋 Copia lista", btnDownloadImg: "📸 Scarica Immagine", btnOwnedAll: "Possedi Tutti", btnMasterAll: "Domina Tutti", btnResetAll: "Ripristina (Mancanti)", modalLevelTitle: "Livello / Dominio", modalNeedsSummon: "Serve evocazione?", btnModalRemove: "Rimuovi Spirito", modalCloseHint: "Clicca fuori per chiudere", exportTitle: "Scarica Screenshot", btnExportAll: "👁️ Esporta Tutto", btnExportAvail: "🔓 Esporta Disponibili", btnExportOwned: "✅ Esporta Posseduti", btnExportMissing: "❌ Esporta Mancanti", btnExportCancel: "Annulla", levelWord: "Livello",
+                variants: { Normal: "Normale", Gold: "Oro", Gummy: "Gommosa", Galaxy: "Galassia", Holo: "Olografico", Gem: "Gemma", Cube: "Cubo", Quack: "Quack" },
+                spirits: { water: "Acqua", earth: "Terra", fire: "Fuoco", fishy: "Pesce", air: "Aria", duck: "Anatra", ghost: "Fantasma", demon: "Demone", king: "Re", striker: "Attaccante", aura: "Aura", dream: "Sogno", punk: "Punk", boss: "Boss", seven: "Sette", peanut: "Nocciolina", zp: "Punto Zero", grim: "Mietitore", batman: "Batman", vini: "Vini Jr.", pollo: "Pollo", john: "John Wick" }
+            },
+            pt: {
+                title: "Lista de Espíritos", subTitle: "Rastreie seus espíritos, variantes, níveis, pó e estado de invocação.", epicIdTitle: "ID Epic Games (opcional)", epicIdPlaceholder: "Digitar ID Epic...", lblSpriteDust: "Pó de Espírito", lblDustReq: "Pó Necessário", infoTitle: "Info:", keyLevel: "Adquirido / Nível Atual", keyMastered: "Espírito Dominado", keyMissing: "Faltando", keyNeedsSummon: "Invocação Necessária", keyUnavailable: "Indisponível", raritiesTitle: "Raridades:", rarityRare: "Raro", rarityEpic: "Épico", rarityLegendary: "Lendário", rarityMythic: "Mítico", barCollection: "Progresso da Coleção", barMastered: "Espíritos Dominados", summonTableTitle: "Tabela de Custo de Invocação", costRareNorm: "Raro Normal", costRareVar: "Variante Rara", costEpicNorm: "Épico Normal", costEpicVar: "Variante Épica", costLegNorm: "Lendário Normal", costLegVar: "Variante Lendária", costMythNorm: "Mítico Normal", costMythVar: "Variante Mítica", optFilterAll: "🗂️ Mostrar Tudo", optFilterAvailable: "🔓 Apenas Disponíveis", optFilterOwned: "✅ Apenas Adquiridos", optFilterMissing: "❌ Apenas Faltando", optFilterUnavailable: "🔒 Apenas Indisponíveis", btnCopyText: "📋 Copiar Lista", btnDownloadImg: "📸 Baixar Imagem", btnOwnedAll: "Obter Todos", btnMasterAll: "Dominar Todos", btnResetAll: "Resetar (Faltando)", modalLevelTitle: "Nível / Domínio", modalNeedsSummon: "Precisa Invocação?", btnModalRemove: "Remover Espírito", modalCloseHint: "Clique fora para fechar", exportTitle: "Baixar Captura", btnExportAll: "👁️ Exportar Tudo", btnExportAvail: "🔓 Exportar Disponíveis", btnExportOwned: "✅ Exportar Adquiridos", btnExportMissing: "❌ Exportar Faltando", btnExportCancel: "Cancelar", levelWord: "Nível",
+                variants: { Normal: "Normal", Gold: "Ouro", Gummy: "Goma", Galaxy: "Galáxia", Holo: "Holo", Gem: "Joia", Cube: "Cubo", Quack: "Quack" },
+                spirits: { water: "Água", earth: "Terra", fire: "Fogo", fishy: "Peixe", air: "Ar", duck: "Pato", ghost: "Fantasma", demon: "Demônio", king: "Rei", striker: "Atacante", aura: "Aura", dream: "Sonho", punk: "Punk", boss: "Chefe", seven: "Sete", peanut: "Amendoim", zp: "Ponto Zero", grim: "Ceifador", batman: "Batman", vini: "Vini Jr.", pollo: "Pollo", john: "John Wick" }
+            },
+            ru: {
+                title: "Чек-лист Духов", subTitle: "Отслеживайте духов, варианты, уровни, пыль и статус призыва.", epicIdTitle: "Epic Games ID (опционально)", epicIdPlaceholder: "Введите Epic ID...", lblSpriteDust: "Пыль Духов", lblDustReq: "Требуется пыли", infoTitle: "Инфо:", keyLevel: "В наличии / Уровень", keyMastered: "Освоенный дух", keyMissing: "Отсутствует", keyNeedsSummon: "Нужен призыв", keyUnavailable: "Недоступно", raritiesTitle: "Редкость:", rarityRare: "Редкий", rarityEpic: "Эпический", rarityLegendary: "Легендарный", rarityMythic: "Мифический", barCollection: "Прогресс коллекции", barMastered: "Освоенные духи", summonTableTitle: "Таблица стоимости призыва", costRareNorm: "Редкий Обычный", costRareVar: "Редкий Вариант", costEpicNorm: "Эпический Обычный", costEpicVar: "Эпический Вариант", costLegNorm: "Легендарный Обычный", costLegVar: "Легендарный Вариант", costMythNorm: "Мифический Обычный", costMythVar: "Мифический Вариант", optFilterAll: "🗂️ Показать все", optFilterAvailable: "🔓 Только доступные", optFilterOwned: "✅ Только в наличии", optFilterMissing: "❌ Только отсутствующие", optFilterUnavailable: "🔒 Только недоступные", btnCopyText: "📋 Скопировать", btnDownloadImg: "📸 Скачать", btnOwnedAll: "Получить все", btnMasterAll: "Освоить все", btnResetAll: "Сбросить", modalLevelTitle: "Уровень / Мастерство", modalNeedsSummon: "Нужен призыв?", btnModalRemove: "Удалить духа", modalCloseHint: "Нажмите снаружи, чтобы закрыть", exportTitle: "Скачать снимок", btnExportAll: "👁️ Экспорт всех", btnExportAvail: "🔓 Экспорт доступных", btnExportOwned: "✅ Экспорт в наличии", btnExportMissing: "❌ Экспорт отсутствующих", btnExportCancel: "Отмена", levelWord: "Уровень",
+                variants: { Normal: "Нормальный", Gold: "Золотой", Gummy: "Мармелад", Galaxy: "Галактика", Holo: "Голо", Gem: "Самоцвет", Cube: "Куб", Quack: "Кряк" },
+                spirits: { water: "Вода", earth: "Земля", fire: "Огонь", fishy: "Рыбка", air: "Воздух", duck: "Утка", ghost: "Призрак", demon: "Демон", king: "Король", striker: "Страйкер", aura: "Аура", dream: "Сон", punk: "Панк", boss: "Босс", seven: "Семь", peanut: "Арахис", zp: "Нулевая Точка", grim: "Жнец", batman: "Бэтмен", vini: "Вини Мл.", pollo: "Полло", john: "Джон Уик" }
+            },
+            ja: {
+                title: "精霊チェックリスト", subTitle: "精霊、バリアント、レベル、ダスト、召喚状態を追跡します。", epicIdTitle: "Epic Games ID (任意)", epicIdPlaceholder: "Epic IDを入力...", lblSpriteDust: "精霊のダスト", lblDustReq: "必要ダスト", infoTitle: "情報:", keyLevel: "所持 / 現在レベル", keyMastered: "マスター済み", keyMissing: "未所持", keyNeedsSummon: "要再召喚", keyUnavailable: "利用不可", raritiesTitle: "レア度:", rarityRare: "レア", rarityEpic: "エピック", rarityLegendary: "レジェンド", rarityMythic: "ミシック", barCollection: "コレクション進行度", barMastered: "マスター済み精霊", summonTableTitle: "召喚コスト参照表", costRareNorm: "レア 通常", costRareVar: "レア バリアント", costEpicNorm: "エピック 通常", costEpicVar: "エピック バリアント", costLegNorm: "レジェンド 通常", costLegVar: "レジェンド バリアント", costMythNorm: "ミシック 通常", costMythVar: "ミシック バリアント", optFilterAll: "🗂️ すべて表示", optFilterAvailable: "🔓 利用可能のみ", optFilterOwned: "✅ 所持のみ", optFilterMissing: "❌ 未所持のみ", optFilterUnavailable: "🔒 利用不可のみ", btnCopyText: "📋 リストをコピー", btnDownloadImg: "📸 画像をダウンロード", btnOwnedAll: "すべて所持", btnMasterAll: "すべてマスター", btnResetAll: "リセット", modalLevelTitle: "レベル / マスタリー", modalNeedsSummon: "再召喚が必要？", btnModalRemove: "精霊を削除", modalCloseHint: "枠外をクリックして閉じる", exportTitle: "スナップショットを保存", btnExportAll: "👁️ すべてエクスポート", btnExportAvail: "🔓 利用可能をエクスポート", btnExportOwned: "✅ 所持をエクスポート", btnExportMissing: "❌ 未所持をエクスポート", btnExportCancel: "キャンセル", levelWord: "レベル",
+                variants: { Normal: "ノーマル", Gold: "ゴールド", Gummy: "グミ", Galaxy: "ギャラクシー", Holo: "ホロ", Gem: "ジェム", Cube: "キューブ", Quack: "クワック" },
+                spirits: { water: "水", earth: "土", fire: "火", fishy: "魚", air: "風", duck: "アヒル", ghost: "ゴースト", demon: "悪魔", king: "キング", striker: "ストライカー", aura: "オーラ", dream: "夢", punk: "パンク", boss: "ボス", seven: "セブン", peanut: "ピーナッツ", zp: "ゼロポイント", grim: "死神", batman: "バットマン", vini: "ヴィニJr.", pollo: "ポージョ", john: "ジョン・ウィック" }
+            },
+            zh: {
+                title: "精灵收集清单", subTitle: "追踪你的精灵、变体、等级、粉尘和召唤状态。", epicIdTitle: "Epic Games ID (可选)", epicIdPlaceholder: "输入 Epic ID...", lblSpriteDust: "精灵尘埃", lblDustReq: "所需尘埃", infoTitle: "信息:", keyLevel: "已拥有 / 当前等级", keyMastered: "已精通精灵", keyMissing: "未拥有", keyNeedsSummon: "需要召唤", keyUnavailable: "不可用", raritiesTitle: "稀有度:", rarityRare: "稀有", rarityEpic: "史诗", rarityLegendary: "传说", rarityMythic: "神话", barCollection: "收集进度", barMastered: "已精通精灵", summonTableTitle: "召唤消耗参考表", costRareNorm: "稀有 普通", costRareVar: "稀有 变体", costEpicNorm: "史诗 普通", costEpicVar: "史诗 变体", costLegNorm: "传说 普通", costLegVar: "传说 变体", costMythNorm: "神话 普通", costMythVar: "神话 变体", optFilterAll: "🗂️ 显示全部", optFilterAvailable: "🔓 仅显示可用", optFilterOwned: "✅ 仅显示已拥有", optFilterMissing: "❌ 仅显示未拥有", optFilterUnavailable: "🔒 仅显示不可用", btnCopyText: "📋 复制文本", btnDownloadImg: "📸 下载图片", btnOwnedAll: "拥有全部", btnMasterAll: "精通全部", btnResetAll: "重置", modalLevelTitle: "等级 / 精通", modalNeedsSummon: "需要召唤？", btnModalRemove: "移除精灵", modalCloseHint: "点击框外区域关闭", exportTitle: "下载快照", btnExportAll: "👁️ 导出全部", btnExportAvail: "🔓 导出可用", btnExportOwned: "✅ 导出已拥有", btnExportMissing: "❌ 导出未拥有", btnExportCancel: "取消", levelWord: "等级",
+                variants: { Normal: "普通", Gold: "黄金", Gummy: "软糖", Galaxy: "星系", Holo: "全息", Gem: "宝石", Cube: "方块", Quack: "嘎嘎" },
+                spirits: { water: "水", earth: "土", fire: "火", fishy: "鱼", air: "风", duck: "鸭子", ghost: "幽灵", demon: "恶魔", king: "国王", striker: "前锋", aura: "光环", dream: "梦境", punk: "朋克", boss: "老板", seven: "七", peanut: "烤花生", zp: "零点", grim: "死神", batman: "蝙蝠侠", vini: "维尼修斯", pollo: "保罗", john: "约翰·威克" }
+            },
+            ko: {
+                title: "정령 체크리스트", subTitle: "정령, 변형, 레벨, 가루 및 소환 상태를 추적하세요.", epicIdTitle: "Epic Games ID (선택사항)", epicIdPlaceholder: "Epic ID 입력...", lblSpriteDust: "정령 가루", lblDustReq: "필요한 가루", infoTitle: "정보:", keyLevel: "보유 / 현재 레벨", keyMastered: "마스터한 정령", keyMissing: "미보유", keyNeedsSummon: "소환 필요", keyUnavailable: "비활성화", raritiesTitle: "희귀도:", rarityRare: "희귀", rarityEpic: "영웅", rarityLegendary: "전설", rarityMythic: "신화", barCollection: "수집 진행도", barMastered: "마스터한 정령", summonTableTitle: "소환 비용 참조표", costRareNorm: "희귀 일반", costRareVar: "희귀 변형", costEpicNorm: "영웅 일반", costEpicVar: "영웅 변형", costLegNorm: "전설 일반", costLegVar: "전설 변형", costMythNorm: "신화 일반", costMythVar: "신화 변형", optFilterAll: "🗂️ 전체 보기", optFilterAvailable: "🔓 사용 가능만 보기", optFilterOwned: "✅ 보유한 것만 보기", optFilterMissing: "❌ 미보유만 보기", optFilterUnavailable: "🔒 비활성화만 보기", btnCopyText: "📋 텍스트 복사", btnDownloadImg: "📸 이미지 다운로드", btnOwnedAll: "모두 보유", btnMasterAll: "모두 마스터", btnResetAll: "리셋", modalLevelTitle: "레벨 / 숙련도", modalNeedsSummon: "소환 필요?", btnModalRemove: "정령 제거", modalCloseHint: "창 바깥을 클릭하여 닫기", exportTitle: "스냅샷 다운로드", btnExportAll: "👁️ 전체 내보내기", btnExportAvail: "🔓 사용 가능 내보내기", btnExportOwned: "✅ 보유한 항목 내보내기", btnExportMissing: "❌ 미보유 내보내기", btnExportCancel: "취소", levelWord: "레벨",
+                variants: { Normal: "일반", Gold: "골드", Gummy: "구미", Galaxy: "갤럭시", Holo: "홀로", Gem: "보석", Cube: "큐브", Quack: "꽥꽥" },
+                spirits: { water: "물", earth: "흙", fire: "불", fishy: "물고기", air: "바람", duck: "오리", ghost: "유령", demon: "악마", king: "킹", striker: "스트라이커", aura: "오라", dream: "꿈", punk: "펑크", boss: "보스", seven: "세븐", peanut: "구운 땅콩", zp: "제로 포인트", grim: "사신", batman: "배트맨", vini: "비니 주니어", pollo: "폴로", john: "존 윅" }
+            },
+            ar: {
+                title: "قائمة الأرواح", subTitle: "تتبع الأرواح والأشكال والمستويات وغبار وحالة الاستدعاء.", epicIdTitle: "معرف Epic Games (اختياري)", epicIdPlaceholder: "أدخل معرف Epic...", lblSpriteDust: "غبار الأرواح", lblDustReq: "الغبار المطلوب", infoTitle: "معلومات:", keyLevel: "مملوك / المستوى الحالي", keyMastered: "روح مقتناة بالكامل", keyMissing: "مفقود", keyNeedsSummon: "يتطلب استدعاء", keyUnavailable: "غير متاح", raritiesTitle: "الندرة:", rarityRare: "نادر", rarityEpic: "ملحمي", rarityLegendary: "أسطوري", rarityMythic: "خرافي", barCollection: "تقدم المجموعة", barMastered: "الأرواح المقتناة", summonTableTitle: "جدول تكلفة الاستدعاء", costRareNorm: "نادر عادي", costRareVar: "شكل نادر", costEpicNorm: "ملحمي عادي", costEpicVar: "شكل ملحمي", costLegNorm: "أسطوري عادي", costLegVar: "شكل أسطوري", costMythNorm: "خرافي عادي", costMythVar: "شكل خرافي", optFilterAll: "🗂️ عرض الكل", optFilterAvailable: "🔓 المتاحة فقط", optFilterOwned: "✅ المملوكة فقط", optFilterMissing: "❌ المفقودة فقط", optFilterUnavailable: "🔒 غير المتاحة فقط", btnCopyText: "📋 نسخ القائمة", btnDownloadImg: "📸 تحميل الصورة", btnOwnedAll: "امتلاك الكل", btnMasterAll: "إتقان الكل", btnResetAll: "إعادة ضبط", modalLevelTitle: "المستوى / الإتقان", modalNeedsSummon: "هل يتطلب استدعاء؟", btnModalRemove: "إزالة الروح", modalCloseHint: "انقر خارج الصندوق للإغلاق", exportTitle: "تحميل اللقطة", btnExportAll: "👁️ تصدير الكل", btnExportAvail: "🔓 تصدير المتاح", btnExportOwned: "✅ تصدير المملوك", btnExportMissing: "❌ تصدير المفقود", btnExportCancel: "إلغاء", levelWord: "مستوى",
+                variants: { Normal: "عادي", Gold: "ذهبي", Gummy: "جيلاتين", Galaxy: "مجرة", Holo: "هولو", Gem: "جوهرة", Cube: "مكعب", Quack: "كواك" },
+                spirits: { water: "ماء", earth: "أرض", fire: "نار", fishy: "سمكة", air: "هواء", duck: "بطة", ghost: "شبح", demon: "شيطان", king: "ملك", striker: "مهاجم", aura: "هالة", dream: "حلم", punk: "بانك", boss: "زعيم", seven: "سبعة", peanut: "فول سوداني", zp: "نقطة الصفر", grim: "حاصد الأرواح", batman: "باتمان", vini: "فيني جونيور", pollo: "بولو", john: "جون ويك" }
+            }
+        };
+
+        const SPIRITS_DATA = [
+            { id: "water", name: "Water", rarity: "Rare", variants: { Normal: true, Gold: true, Gummy: true, Galaxy: true, Holo: true, Gem: "Blocked", Cube: false, Quack: false } },
+            { id: "earth", name: "Earth", rarity: "Rare", variants: { Normal: true, Gold: true, Gummy: true, Galaxy: true, Holo: false, Gem: "Blocked", Cube: "Blocked", Quack: false } },
+            { id: "fire", name: "Fire", rarity: "Rare", variants: { Normal: true, Gold: true, Gummy: true, Galaxy: true, Holo: true, Gem: false, Cube: "Blocked", Quack: false } },
+            { id: "fishy", name: "Fishy", rarity: "Rare", variants: { Normal: true, Gold: true, Gummy: true, Galaxy: true, Holo: false, Gem: false, Cube: "Blocked", Quack: false } },
+            { id: "air", name: "Air", rarity: "Rare", variants: { Normal: true, Gold: true, Gummy: true, Galaxy: true, Holo: true, Gem: false, Cube: false, Quack: false } },
+            { id: "duck", name: "Duck", rarity: "Epic", variants: { Normal: true, Gold: true, Gummy: true, Galaxy: true, Holo: "Blocked", Gem: "Blocked", Cube: false, Quack: false } },
+            { id: "ghost", name: "Ghost", rarity: "Epic", variants: { Normal: true, Gold: true, Gummy: true, Galaxy: true, Holo: true, Gem: false, Cube: false, Quack: false } },
+            { id: "demon", name: "Demon", rarity: "Epic", variants: { Normal: true, Gold: true, Gummy: true, Galaxy: true, Holo: false, Gem: "Blocked", Cube: false, Quack: false } },
+            { id: "king", name: "King", rarity: "Epic", variants: { Normal: true, Gold: true, Gummy: true, Galaxy: true, Holo: true, Gem: false, Cube: false, Quack: false } },
+            { id: "striker", name: "Striker", rarity: "Epic", variants: { Normal: true, Gold: true, Gummy: true, Galaxy: true, Holo: true, Gem: false, Cube: false, Quack: false } },
+            { id: "aura", name: "Aura", rarity: "Epic", variants: { Normal: true, Gold: true, Gummy: true, Galaxy: true, Holo: false, Gem: "Blocked", Cube: false, Quack: false } },
+            { id: "dream", name: "Dream", rarity: "Legendary", variants: { Normal: true, Gold: true, Gummy: true, Galaxy: true, Holo: false, Gem: false, Cube: "Blocked", Quack: false } },
+            { id: "punk", name: "Punk", rarity: "Legendary", variants: { Normal: true, Gold: true, Gummy: true, Galaxy: true, Holo: false, Gem: "Blocked", Cube: "Blocked", Quack: false } },
+            { id: "boss", name: "Boss", rarity: "Legendary", variants: { Normal: true, Gold: true, Gummy: true, Galaxy: true, Holo: false, Gem: false, Cube: "Blocked", Quack: false } },
+            { id: "seven", name: "Seven", rarity: "Legendary", variants: { Normal: true, Gold: true, Gummy: true, Galaxy: true, Holo: true, Gem: false, Cube: false, Quack: false } },
+            { id: "peanut", name: "Burnt Peanut", rarity: "Mythic", variants: { Normal: true, Gold: false, Gummy: false, Galaxy: false, Holo: false, Gem: false, Cube: false, Quack: false } },
+            { id: "zp", name: "Zero Point", rarity: "Mythic", variants: { Normal: true, Gold: true, Gummy: true, Galaxy: true, Holo: false, Gem: "Blocked", Cube: false, Quack: "Blocked" } },
+            { id: "grim", name: "Grim Reaper", rarity: "Mythic", variants: { Normal: true, Gold: true, Gummy: true, Galaxy: true, Holo: false, Gem: false, Cube: "Blocked", Quack: false } },
+            { id: "batman", name: "Batman", rarity: "Mythic", variants: { Normal: true, Gold: true, Gummy: true, Galaxy: true, Holo: true, Gem: false, Cube: "Blocked", Quack: false } },
+            { id: "vini", name: "Vini Jr.", rarity: "Mythic", variants: { Normal: true, Gold: false, Gummy: false, Galaxy: false, Holo: false, Gem: false, Cube: false, Quack: false } },
+            { id: "pollo", name: "Pollo", rarity: "Mythic", variants: { Normal: true, Gold: false, Gummy: false, Galaxy: false, Holo: false, Gem: false, Cube: false, Quack: false } },
+            { id: "john", name: "John Wick", rarity: "Mythic", variants: { Normal: "Blocked", Gold: false, Gummy: false, Galaxy: false, Holo: false, Gem: false, Cube: false, Quack: false } }
+        ];
+
+        const SINGLE_VARIANT_SPIRITS = ["peanut", "vini", "pollo", "john"];
+        const ALL_VARIANTS = ["Normal", "Gold", "Gummy", "Galaxy", "Holo", "Cube", "Gem", "Quack"];
+        
+        const SUMMON_COSTS = {
+            "rare_normal": 100, "rare_variant": 4000,
+            "epic_normal": 3000, "epic_variant": 6000,
+            "legendary_normal": 5000, "legendary_variant": 10000,
+            "mythic_normal": 7500, "mythic_variant": 15000
+        };
+        
+        let currentEditingSlot = null;
+        let activeModalLevel = 1;
+        let activeModalCrown = false;
+        let activeModalSummon = false;
+        let currentLang = "en";
+        let currentZoomLevel = 1.0;
+
+        function adjustZoom(delta) {
+            if (delta !== 0) {
+                currentZoomLevel = Math.min(1.5, Math.max(0.5, currentZoomLevel + delta));
+            }
+            document.documentElement.style.setProperty('--card-scale', currentZoomLevel);
+            document.getElementById('zoomValText').innerText = `${Math.round(currentZoomLevel * 100)}%`;
+            localStorage.setItem('spriteChecklistZoom', currentZoomLevel.toString());
+        }
+
+        function handleDustInput(input) {
+            let num = parseInt(input.value.replace(/[^0-9]/g, '')) || 0;
+            if (num > 200000) num = 200000;
+            input.value = num.toLocaleString('en-US');
+            saveToLocalStorage();
+        }
+
+        function handleDustKeyDown(e, input) {
+            if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+                e.preventDefault();
+                let num = parseInt(input.value.replace(/[^0-9]/g, '')) || 0;
+                if (e.key === 'ArrowUp') num = Math.min(200000, num + 1000);
+                if (e.key === 'ArrowDown') num = Math.max(0, num - 1000);
+                input.value = num.toLocaleString('en-US');
+                saveToLocalStorage();
+            }
+        }
+
+        function getTranslationDict(langKey) {
+            return TRANSLATIONS[langKey] || TRANSLATIONS['en'];
+        }
+
+        function changeLanguage(langKey) {
+            currentLang = langKey;
+            const t = getTranslationDict(langKey);
+
+            document.getElementById('txtTitle').innerText = t.title;
+            document.getElementById('txtSubTitle').innerText = t.subTitle;
+            document.getElementById('lblEpicId').childNodes[0].nodeValue = (t.epicIdTitle || "Epic Games ID (optional)") + " ";
+            document.getElementById('epicIdInput').placeholder = t.epicIdPlaceholder;
+            
+            document.getElementById('lblSpriteDust').childNodes[0].nodeValue = t.lblSpriteDust + " ";
+            document.getElementById('lblDustReq').childNodes[0].nodeValue = t.lblDustReq + " ";
+            
+            document.getElementById('txtInfoTitle').innerText = t.infoTitle;
+            document.getElementById('txtKeyLevel').innerText = t.keyLevel;
+            document.getElementById('txtKeyMastered').innerText = t.keyMastered;
+            document.getElementById('txtKeyMissing').innerText = t.keyMissing;
+            document.getElementById('txtKeyNeedsSummon').innerText = t.keyNeedsSummon;
+            document.getElementById('txtKeyUnavailable').innerText = t.keyUnavailable;
+            document.getElementById('sampleLvlBadge').innerText = `${t.levelWord} X`;
+            
+            document.getElementById('txtRaritiesTitle').innerText = t.raritiesTitle;
+            document.getElementById('txtRarityRare').innerText = t.rarityRare;
+            document.getElementById('txtRarityEpic').innerText = t.rarityEpic;
+            document.getElementById('txtRarityLegendary').innerText = t.rarityLegendary;
+            document.getElementById('txtRarityMythic').innerText = t.rarityMythic;
+            
+            document.getElementById('txtBarCollection').innerText = t.barCollection;
+            document.getElementById('txtBarMastered').childNodes[1].nodeValue = " " + t.barMastered;
+            
+            document.getElementById('txtSummonTableTitle').childNodes[1].nodeValue = " " + t.summonTableTitle;
+            document.getElementById('txtCostRareNorm').innerText = t.costRareNorm;
+            document.getElementById('txtCostRareVar').innerText = t.costRareVar;
+            document.getElementById('txtCostEpicNorm').innerText = t.costEpicNorm;
+            document.getElementById('txtCostEpicVar').innerText = t.costEpicVar;
+            document.getElementById('txtCostLegNorm').innerText = t.costLegNorm;
+            document.getElementById('txtCostLegVar').innerText = t.costLegVar;
+            document.getElementById('txtCostMythNorm').innerText = t.costMythNorm;
+            document.getElementById('txtCostMythVar').innerText = t.costMythVar;
+            
+            document.getElementById('optFilterAll').innerText = t.optFilterAll;
+            document.getElementById('optFilterAvailable').innerText = t.optFilterAvailable;
+            document.getElementById('optFilterOwned').innerText = t.optFilterOwned;
+            document.getElementById('optFilterMissing').innerText = t.optFilterMissing;
+            document.getElementById('optFilterUnavailable').innerText = t.optFilterUnavailable;
+            
+            document.getElementById('btnCopyText').innerText = t.btnCopyText;
+            document.getElementById('btnDownloadImg').innerText = t.btnDownloadImg;
+            document.getElementById('btnOwnedAll').childNodes[1].nodeValue = " " + t.btnOwnedAll;
+            document.getElementById('btnMasterAll').childNodes[1].nodeValue = " " + t.btnMasterAll;
+            document.getElementById('btnResetAll').childNodes[1].nodeValue = " " + t.btnResetAll;
+            
+            document.getElementById('txtModalLevelTitle').innerText = t.modalLevelTitle;
+            document.getElementById('txtModalNeedsSummon').innerText = t.modalNeedsSummon;
+            document.getElementById('btnModalRemove').innerText = t.btnModalRemove;
+            document.getElementById('txtModalCloseHint').innerText = t.modalCloseHint;
+            
+            document.getElementById('txtExportTitle').innerText = t.exportTitle;
+            document.getElementById('btnExportAll').innerText = t.btnExportAll;
+            document.getElementById('btnExportAvail').innerText = t.btnExportAvail;
+            document.getElementById('btnExportOwned').innerText = t.btnExportOwned;
+            document.getElementById('btnExportMissing').innerText = t.btnExportMissing;
+            document.getElementById('btnExportCancel').innerText = t.btnExportCancel;
+
+            const selectEl = document.getElementById('langSelect');
+            if(langConfig[langKey]) {
+                selectEl.style.backgroundColor = langConfig[langKey].bg;
+                selectEl.style.color = langConfig[langKey].txt;
+                selectEl.style.borderColor = langConfig[langKey].border;
+            }
+
+            updateAllDynamicText();
+            localStorage.setItem('spriteChecklistLang', langKey);
+            filterLockerView(document.getElementById('viewFilterSelect').value);
+        }
+
+        function updateAllDynamicText() {
+            const t = getTranslationDict(currentLang);
+            
+            document.querySelectorAll('.sprite-card-block').forEach(card => {
+                const sId = card.getAttribute('data-sprite-id');
+                const translatedName = (t.spirits && t.spirits[sId]) ? t.spirits[sId] : card.getAttribute('data-sprite-name');
+                const headerTitle = card.querySelector('.sprite-card-header span');
+                if (headerTitle) headerTitle.innerText = translatedName;
+
+                card.querySelectorAll('.slot-box').forEach(slot => {
+                    const variant = slot.getAttribute('data-variant');
+                    const vTag = slot.querySelector('.variant-tag');
+                    if (vTag && variant) {
+                        vTag.innerText = (t.variants && t.variants[variant]) ? t.variants[variant] : (variant === "Holo" ? "Holofoil" : variant);
+                    }
+                    refreshSlotDOM(slot);
+                });
+            });
+        }
+
+        function saveToLocalStorage() {
+            const lockerData = {
+                epicId: document.getElementById('epicIdInput').value,
+                dustValue: document.getElementById('dustInput').value,
+                slots: {}
+            };
+            const slots = document.querySelectorAll('.slot-box:not(.unavailable):not(.blocked)');
+            
+            slots.forEach(slot => {
+                const parent = slot.closest('.sprite-card-block');
+                const spriteId = parent.getAttribute('data-sprite-id');
+                const variant = slot.getAttribute('data-variant');
+                const key = `${spriteId}_${variant}`;
+                
+                lockerData.slots[key] = {
+                    owned: slot.getAttribute('data-owned'),
+                    level: slot.getAttribute('data-level'),
+                    mastery: slot.getAttribute('data-mastery'),
+                    summon: slot.getAttribute('data-summon')
+                };
+            });
+
+            localStorage.setItem('spriteChecklistData', JSON.stringify(lockerData));
+        }
+
+        function loadFromLocalStorage() {
+            const savedLang = localStorage.getItem('spriteChecklistLang') || 'en';
+            document.getElementById('langSelect').value = savedLang;
+
+            const savedZoom = localStorage.getItem('spriteChecklistZoom');
+            if (savedZoom) {
+                currentZoomLevel = parseFloat(savedZoom);
+                adjustZoom(0);
+            }
+
+            const savedData = localStorage.getItem('spriteChecklistData');
+            if (!savedData) {
+                changeLanguage(savedLang);
+                return;
+            }
+
+            const lockerData = JSON.parse(savedData);
+            if (lockerData.epicId !== undefined) document.getElementById('epicIdInput').value = lockerData.epicId;
+            if (lockerData.dustValue !== undefined) {
+                document.getElementById('dustInput').value = lockerData.dustValue;
+            } else {
+                document.getElementById('dustInput').value = '0';
+            }
+            
+            const slotsData = lockerData.slots || lockerData;
+            for (const key in slotsData) {
+                const [spriteId, variant] = key.split('_');
+                const card = document.querySelector(`.sprite-card-block[data-sprite-id="${spriteId}"]`);
+                if (card) {
+                    const slot = card.querySelector(`.slot-box[data-variant="${variant}"]`);
+                    if (slot && !slot.classList.contains('unavailable')) {
+                        const item = slotsData[key];
+                        slot.setAttribute('data-owned', item.owned);
+                        slot.setAttribute('data-level', item.level);
+                        slot.setAttribute('data-mastery', item.mastery);
+                        slot.setAttribute('data-summon', item.summon);
+                    }
+                }
+            }
+            changeLanguage(savedLang);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            buildLockerGrid();
+            loadFromLocalStorage();
+            recalculateMetrics();
+            filterLockerView('available');
+        });
+        
+        function buildLockerGrid() {
+            const container = document.getElementById('mainLockerGrid');
+            container.innerHTML = "";
+            
+            const rarityOrder = { "Rare": 1, "Epic": 2, "Legendary": 3, "Mythic": 4 };
+            const sortedSpirits = [...SPIRITS_DATA].sort((a, b) => rarityOrder[a.rarity] - rarityOrder[b.rarity]);
+
+            sortedSpirits.forEach(sprite => {
+                const card = document.createElement('div');
+                card.className = "sprite-card-block";
+                card.setAttribute('data-sprite-id', sprite.id);
+                card.setAttribute('data-sprite-name', sprite.name);
+                card.setAttribute('data-rarity', sprite.rarity);
+                card.style.setProperty('--sprite-rarity', `var(--rarity-${sprite.rarity.toLowerCase()})`);
+                
+                card.innerHTML = `
+                    <div class="sprite-card-header">
+                        <span>${sprite.name}</span>
+                        <div class="card-mini-actions">
+                            <button class="mini-btn mini-btn-own" title="Owned All" onclick="triggerCardAction('${sprite.id}', 'own-all')"><img src="green.webp" alt="✅" class="icon-small"></button>
+                            <button class="mini-btn mini-btn-master" title="Master All" onclick="triggerCardAction('${sprite.id}', 'master-all')"><img src="crown.webp" alt="👑" class="icon-small"></button>
+                            <button class="mini-btn mini-btn-reset" title="Reset All (Missing)" onclick="triggerCardAction('${sprite.id}', 'reset-all')"><img src="red.webp" alt="❌" class="icon-small"></button>
+                        </div>
+                    </div>
+                `;
+                
+                const matrixWrapper = document.createElement('div');
+                matrixWrapper.className = "sprite-matrix fixed-grid";
+                ALL_VARIANTS.forEach(v => { matrixWrapper.appendChild(createSlotHTML(sprite, v)); });
+                
+                card.appendChild(matrixWrapper);
+                container.appendChild(card);
+            });
+        }
+
+        function createSlotHTML(sprite, variant) {
+            const variantStatus = sprite.variants[variant];
+            const slot = document.createElement('div');
+            const displayTagText = variant === "Holo" ? "Holofoil" : variant;
+            const isSingleVariant = SINGLE_VARIANT_SPIRITS.includes(sprite.id);
+            
+            if (isSingleVariant && variant !== "Normal") {
+                slot.className = "slot-box single-variant-disabled";
+                slot.setAttribute('data-variant', variant);
+                return slot;
+            }
+
+            if (variantStatus === false || variantStatus === "Unavailable" || variantStatus === "Unreleased" || variantStatus === "Not Exist") {
+                slot.className = "slot-box unavailable"; 
+                slot.setAttribute('data-variant', variant);
+                slot.setAttribute('data-rarity-origin', sprite.rarity);
+                slot.innerHTML = `<div class="variant-tag">${displayTagText}</div>`;
+                return slot;
+            }
+            
+            slot.className = "slot-box not-owned";
+            slot.setAttribute('data-variant', variant);
+            slot.setAttribute('data-rarity-origin', sprite.rarity);
+            slot.setAttribute('data-level', '1');
+            slot.setAttribute('data-summon', 'false');
+            slot.setAttribute('data-mastery', 'false');
+            slot.setAttribute('data-owned', 'false');
+            
+            let extraHTML = "";
+            if (variantStatus === "Blocked") {
+                slot.classList.add('blocked');
+                slot.setAttribute('data-status', 'Blocked');
+                extraHTML = `<img src="lock.webp" alt="🔒" class="blocked-overlay">`;
+            } else {
+                slot.onclick = function() { handleSlotClick(this); };
+            }
+            
+            const imgName = `${sprite.id}_${variant.toLowerCase()}.webp`;
+            
+            slot.innerHTML = `
+                <div class="variant-tag">${displayTagText}</div>
+                <span class="mini-crown"><img src="crown1.webp" alt="👑"></span>
+                <div class="slot-inner"><img src="${imgName}" alt="${sprite.name} ${displayTagText}" onerror="this.style.display='none'"></div>
+                ${extraHTML}
+                <div class="level-badge">Level 1</div>`;
+            
+            return slot;
+        }
+
+        function triggerMassiveAction(actionType) {
+            const slots = document.querySelectorAll('.slot-box:not(.unavailable):not(.blocked):not(.single-variant-disabled)');
+            slots.forEach(slot => { applyActionToSlot(slot, actionType); });
+            recalculateMetrics();
+            filterLockerView(document.getElementById('viewFilterSelect').value);
+            saveToLocalStorage();
+        }
+
+        function triggerCardAction(spriteId, actionType) {
+            const card = document.querySelector(`.sprite-card-block[data-sprite-id="${spriteId}"]`);
+            if (!card) return;
+            const slots = card.querySelectorAll('.slot-box:not(.unavailable):not(.blocked):not(.single-variant-disabled)');
+            slots.forEach(slot => { applyActionToSlot(slot, actionType); });
+            recalculateMetrics();
+            filterLockerView(document.getElementById('viewFilterSelect').value);
+            saveToLocalStorage();
+        }
+
+        function applyActionToSlot(slot, actionType) {
+            if (actionType === 'own-all') {
+                slot.setAttribute('data-owned', 'true');
+                slot.setAttribute('data-level', '1');
+                slot.setAttribute('data-mastery', 'false');
+                slot.setAttribute('data-summon', 'false');
+            } else if (actionType === 'master-all') {
+                slot.setAttribute('data-owned', 'true');
+                slot.setAttribute('data-level', '5');
+                slot.setAttribute('data-mastery', 'true');
+                slot.setAttribute('data-summon', 'false');
+            } else if (actionType === 'reset-all') {
+                slot.setAttribute('data-owned', 'false');
+                slot.setAttribute('data-level', '1');
+                slot.setAttribute('data-mastery', 'false');
+                slot.setAttribute('data-summon', 'false');
+            }
+            refreshSlotDOM(slot);
+        }
+
+        function handleSlotClick(slotElement) {
+            if (slotElement.classList.contains('unavailable') || slotElement.classList.contains('blocked') || slotElement.classList.contains('single-variant-disabled')) return;
+            
+            if (slotElement.classList.contains('not-owned')) {
+                slotElement.classList.remove('not-owned');
+                slotElement.setAttribute('data-owned', 'true');
+                slotElement.setAttribute('data-level', '1');
+                refreshSlotDOM(slotElement);
+                recalculateMetrics();
+                filterLockerView(document.getElementById('viewFilterSelect').value);
+                saveToLocalStorage();
+            } else {
+                currentEditingSlot = slotElement;
+                const parentBlock = slotElement.closest('.sprite-card-block');
+                const sId = parentBlock.getAttribute('data-sprite-id');
+                const t = getTranslationDict(currentLang);
+                const spriteName = (t.spirits && t.spirits[sId]) ? t.spirits[sId] : parentBlock.getAttribute('data-sprite-name');
+                
+                const rarityType = parentBlock.getAttribute('data-rarity');
+                const variantType = slotElement.getAttribute('data-variant');
+                const displayVariantName = (t.variants && t.variants[variantType]) ? t.variants[variantType] : (variantType === "Holo" ? "Holofoil" : variantType);
+                const imgHtml = slotElement.querySelector('.slot-inner').innerHTML;
+                
+                document.getElementById('modalIcon').innerHTML = imgHtml;
+                document.getElementById('modalNameDisplay').innerText = `${displayVariantName} ${spriteName}`;
+                
+                const rarityBadge = document.getElementById('modalRarityDisplay');
+                rarityBadge.innerText = (t[`rarity${rarityType}`]) ? t[`rarity${rarityType}`] : rarityType;
+                rarityBadge.style.color = `var(--rarity-${rarityType.toLowerCase()})`;
+                
+                activeModalLevel = parseInt(slotElement.getAttribute('data-level')) || 1;
+                activeModalCrown = slotElement.getAttribute('data-mastery') === 'true';
+                activeModalSummon = slotElement.getAttribute('data-summon') === 'true';
+                
+                updateModalButtonsUI();
+                document.getElementById('editorModal').style.display = 'flex';
+            }
+        }
+
+        function updateModalButtonsUI() {
+            for (let i = 1; i <= 5; i++) {
+                const btn = document.getElementById(`lBtn${i}`);
+                if (i === activeModalLevel) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            }
+            const crownBtn = document.getElementById('modalCrownBtn');
+            if (activeModalCrown) {
+                crownBtn.classList.add('active');
+            } else {
+                crownBtn.classList.remove('active');
+            }
+            const check = document.getElementById('modalSummonCheck');
+            check.checked = activeModalSummon;
+        }
+
+        function setModalLvl(lvl) {
+            activeModalLevel = lvl;
+            if (lvl === 5) { activeModalCrown = true; }
+            updateModalButtonsUI();
+            saveModalChanges();
+        }
+
+        function toggleModalCrown() {
+            activeModalCrown = !activeModalCrown;
+            updateModalButtonsUI();
+            saveModalChanges();
+        }
+
+        function toggleModalSummon() {
+            activeModalSummon = !activeModalSummon;
+            activeModalLevel = 1; 
+            updateModalButtonsUI();
+            saveModalChanges();
+        }
+
+        function saveModalChanges() {
+            if (!currentEditingSlot) return;
+            currentEditingSlot.setAttribute('data-level', activeModalLevel.toString());
+            currentEditingSlot.setAttribute('data-mastery', activeModalCrown.toString());
+            currentEditingSlot.setAttribute('data-summon', activeModalSummon.toString());
+            refreshSlotDOM(currentEditingSlot);
+            recalculateMetrics();
+            saveToLocalStorage();
+        }
+
+        function removeCurrentSprite() {
+            if (!currentEditingSlot) return;
+            currentEditingSlot.className = "slot-box not-owned";
+            currentEditingSlot.setAttribute('data-owned', 'false');
+            currentEditingSlot.setAttribute('data-level', '1');
+            currentEditingSlot.setAttribute('data-mastery', 'false');
+            currentEditingSlot.setAttribute('data-summon', 'false');
+            refreshSlotDOM(currentEditingSlot);
+            recalculateMetrics();
+            closeModal();
+            filterLockerView(document.getElementById('viewFilterSelect').value);
+            saveToLocalStorage();
+        }
+
+        function refreshSlotDOM(slotElement) {
+            const isOwned = slotElement.getAttribute('data-owned') === 'true';
+            const isSummon = slotElement.getAttribute('data-summon') === 'true';
+            const isCrown = slotElement.getAttribute('data-mastery') === 'true';
+            const currentLvl = slotElement.getAttribute('data-level');
+            const isBlocked = slotElement.classList.contains('blocked');
+            const isUnavailable = slotElement.classList.contains('unavailable');
+            const isSingleVariantDisabled = slotElement.classList.contains('single-variant-disabled');
+            const t = getTranslationDict(currentLang);
+            
+            if (isUnavailable || isSingleVariantDisabled) { 
+                return;
+            }
+
+            slotElement.className = "slot-box";
+            if (isBlocked) { 
+                slotElement.classList.add('blocked'); 
+            } else {
+                if (!isOwned) {
+                    slotElement.classList.add('not-owned');
+                } else if (isSummon) {
+                    slotElement.classList.add('needs-summon');
+                }
+                if (isCrown) {
+                    slotElement.classList.add('has-crown');
+                }
+            }
+
+            const badge = slotElement.querySelector('.level-badge');
+            if (badge) {
+                const levelPrefix = t.levelWord || "Level";
+                badge.innerText = isSummon ? (t.keyNeedsSummon ? t.keyNeedsSummon.split('/')[0].trim() : "Needs Summon") : `${levelPrefix} ${currentLvl}`;
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('editorModal').style.display = 'none';
+            currentEditingSlot = null;
+        }
+
+        function handleOutsideClick(event) {
+            if (event.target.id === 'editorModal') {
+                closeModal();
+            }
+        }
+
+        function recalculateMetrics() {
+            const allSlots = document.querySelectorAll('.slot-box:not(.unavailable):not(.blocked):not(.single-variant-disabled)');
+            let totalAvailable = allSlots.length;
+            let totalOwned = 0;
+            let totalMastered = 0;
+            let dustNeeded = 0;
+            let rarities = {
+                Rare: { owned: 0, total: 0 }, Epic: { owned: 0, total: 0 }, Legendary: { owned: 0, total: 0 }, Mythic: { owned: 0, total: 0 }
+            };
+            
+            allSlots.forEach(slot => {
+                const rarity = slot.getAttribute('data-rarity-origin');
+                const isOwned = slot.getAttribute('data-owned') === 'true';
+                const isSummon = slot.getAttribute('data-summon') === 'true';
+                const isMastered = slot.getAttribute('data-mastery') === 'true';
+                const variant = slot.getAttribute('data-variant');
+                
+                if (rarities[rarity]) {
+                    rarities[rarity].total++;
+                    if (isOwned) {
+                        rarities[rarity].owned++;
+                        totalOwned++;
+                        if (isMastered) { totalMastered++; }
+                    }
+                }
+                if (isOwned && isSummon) {
+                    const key = `${rarity.toLowerCase()}_${variant === 'Normal' ? 'normal' : 'variant'}`;
+                    dustNeeded += SUMMON_COSTS[key] || 0;
+                }
+            });
+            
+            document.getElementById('dustRequiredVal').innerText = dustNeeded.toLocaleString('en-US');
+            document.getElementById('collectionCountText').innerText = `${totalOwned} / ${totalAvailable}`;
+            document.getElementById('masteredCountText').innerText = `${totalMastered} / ${totalAvailable}`;
+            
+            const colBar = document.getElementById('collectionProgressBar');
+            const colPct = totalAvailable > 0 ? (totalOwned / totalAvailable) * 100 : 0;
+            colBar.style.width = `${colPct}%`;
+            
+            const mstBar = document.getElementById('masteredProgressBar');
+            const mstPct = totalAvailable > 0 ? (totalMastered / totalAvailable) * 100 : 0;
+            mstBar.style.width = `${mstPct}%`;
+            
+            for (let rKey in rarities) {
+                const counterSpan = document.getElementById(`count${rKey}`);
+                if (counterSpan) {
+                    counterSpan.innerText = `(${rarities[rKey].owned}/${rarities[rKey].total})`;
+                }
+            }
+        }
+
+        function filterLockerView(mode) {
+            const blocks = document.querySelectorAll('.sprite-card-block');
+            blocks.forEach(block => {
+                let hasVisibleSlot = false;
+                let hasAnyOwnedInCard = false;
+                const matrix = block.querySelector('.sprite-matrix');
+                const slots = block.querySelectorAll('.slot-box');
+                
+                if (mode === 'missing' || mode === 'unavailable') {
+                    matrix.classList.remove('fixed-grid');
+                    matrix.classList.add('flow-grid');
+                } else {
+                    matrix.classList.remove('flow-grid');
+                    matrix.classList.add('fixed-grid');
+                }
+
+                slots.forEach(slot => {
+                    const isOwned = slot.getAttribute('data-owned') === 'true';
+                    const isBlocked = slot.classList.contains('blocked');
+                    const isUnavailable = slot.classList.contains('unavailable');
+                    const isSingleVariantDisabled = slot.classList.contains('single-variant-disabled');
+                    
+                    if (isSingleVariantDisabled) return;
+
+                    slot.classList.remove('hide-completely', 'invisible-space', 'show-all-placeholder');
+                    
+                    if (mode === 'all') {
+                        if (isUnavailable) slot.classList.add('show-all-placeholder');
+                        hasVisibleSlot = true;
+                    } 
+                    else if (mode === 'available') {
+                        if (isUnavailable || isBlocked) {
+                            slot.classList.add('invisible-space');
+                        } else {
+                            hasVisibleSlot = true;
+                        }
+                    } 
+                    else if (mode === 'owned') {
+                        if (isUnavailable || isBlocked) {
+                            slot.classList.add('invisible-space');
+                        } else if (isOwned) {
+                            hasVisibleSlot = true;
+                            hasAnyOwnedInCard = true;
+                        } else {
+                            slot.classList.add('invisible-space');
+                        }
+                    } 
+                    else if (mode === 'missing') {
+                        if (isUnavailable || isBlocked) {
+                            slot.classList.add('hide-completely');
+                        } else if (!isOwned) {
+                            hasVisibleSlot = true;
+                        } else {
+                            slot.classList.add('hide-completely');
+                        }
+                    } 
+                    else if (mode === 'unavailable') {
+                        if (isBlocked) {
+                            hasVisibleSlot = true;
+                        } else {
+                            slot.classList.add('hide-completely');
+                        }
+                    }
+                });
+                
+                if (mode === 'owned') {
+                    if (hasAnyOwnedInCard) block.classList.remove('hide-card-completely');
+                    else block.classList.add('hide-card-completely');
+                } else {
+                    if (hasVisibleSlot) block.classList.remove('hide-card-completely');
+                    else block.classList.add('hide-card-completely');
+                }
+            });
+        }
+
+        /* FORMATO CÓDIGO MONOSPACIADO PARA DISCORD */
+        function copyTextCollection() {
+            const allVariantKeys = ["Normal", "Gold", "Gummy", "Galaxy", "Holo", "Cube", "Gem", "Quack"];
+            const allVariantHeaders = ["NORMAL", "GOLD", "GUMMY", "GALAXY", "HOLOFOIL", "CUBE", "GEM", "QUACK"];
+            
+            const rarityOrder = { "Rare": 1, "Epic": 2, "Legendary": 3, "Mythic": 4 };
+            const sortedSpirits = [...SPIRITS_DATA].sort((a, b) => rarityOrder[a.rarity] - rarityOrder[b.rarity]);
+
+            let activeIndices = [];
+            allVariantKeys.forEach((vKey, index) => {
+                let isVariantAvailableInAny = sortedSpirits.some(sprite => {
+                    const status = sprite.variants[vKey];
+                    return status !== false && status !== "Unavailable" && status !== "Unreleased" && status !== "Not Exist" && status !== "Blocked";
+                });
+                if (isVariantAvailableInAny) {
+                    activeIndices.push(index);
+                }
+            });
+
+            const activeHeaders = activeIndices.map(i => allVariantHeaders[i]);
+            const t = getTranslationDict(currentLang);
+            
+            let textOutput = "```\n";
+            textOutput += `| ${activeHeaders.join(' | ')} |\n`;
+            textOutput += "👑 Mastered\n✅ Owned\n🔄 Need Summon\n❌ Missing\n🚫 Not Available\n";
+            textOutput += "---------------------------------------------------------\n";
+
+            let totalOwned = 0;
+            let totalAvailableSlots = 0;
+
+            sortedSpirits.forEach(sprite => {
+                const card = document.querySelector(`.sprite-card-block[data-sprite-id="${sprite.id}"]`);
+                if (!card || card.classList.contains('hide-card-completely')) return;
+
+                let icons = [];
+                activeIndices.forEach(idx => {
+                    const v = allVariantKeys[idx];
+                    const variantStatus = sprite.variants[v];
+                    const slot = card.querySelector(`.slot-box[data-variant="${v}"]`);
+
+                    if (variantStatus === false || variantStatus === "Unavailable" || variantStatus === "Unreleased" || variantStatus === "Not Exist" || variantStatus === "Blocked" || (slot && slot.classList.contains('blocked'))) {
+                        icons.push("🚫");
+                    } else if (slot) {
+                        totalAvailableSlots++;
+                        const isOwned = slot.getAttribute('data-owned') === 'true';
+                        const isMastered = slot.getAttribute('data-mastery') === 'true';
+                        const isSummon = slot.getAttribute('data-summon') === 'true';
+
+                        if (isMastered) { icons.push("👑"); totalOwned++; } 
+                        else if (isSummon) { icons.push("🔄"); totalOwned++; } 
+                        else if (isOwned) { icons.push("✅"); totalOwned++; } 
+                        else { icons.push("❌"); }
+                    } else {
+                        icons.push("🚫");
+                    }
+                });
+
+                const displayName = (t.spirits && t.spirits[sprite.id]) ? t.spirits[sprite.id] : sprite.name;
+                const formattedName = displayName.padEnd(14);
+                textOutput += `${formattedName} | ${icons.join(' | ')} |\n`;
+            });
+
+            textOutput += `\n${totalOwned}/${totalAvailableSlots} collected\n`;
+            textOutput += "```";
+
+            navigator.clipboard.writeText(textOutput).then(() => {
+                alert(currentLang === 'es' ? "¡Lista de colección copiada en formato código para Discord!" : "Collection text list copied in code block format for Discord!");
+            });
+        }
+
+        function openExportDialog() { document.getElementById('exportOverlay').style.display = 'flex'; }
+        function closeExportDialog() { document.getElementById('exportOverlay').style.display = 'none'; }
+        
+        /* SISTEMA DE CAPTURA SILENCIOSO */
+        function takeScreenshot(filterMode) {
+            closeExportDialog();
+
+            const exportContainer = document.createElement('div');
+            exportContainer.style.position = 'absolute';
+            exportContainer.style.left = '-10000px'; 
+            exportContainer.style.top = '0';
+            exportContainer.style.width = '1200px'; 
+            exportContainer.style.background = 'var(--bg-gradient)';
+            exportContainer.style.padding = '30px';
+            exportContainer.style.fontFamily = "'Poppins', sans-serif";
+            exportContainer.style.color = 'var(--text-color)';
+            exportContainer.style.boxSizing = 'border-box';
+
+            const stats = document.createElement('div');
+            stats.style.display = 'flex';
+            stats.style.justifyContent = 'space-between';
+            stats.style.alignItems = 'center';
+            stats.style.marginBottom = '20px';
+            stats.style.background = 'rgba(255,255,255,0.9)';
+            stats.style.padding = '20px';
+            stats.style.borderRadius = '10px';
+            stats.style.border = '1px solid rgba(255, 255, 255, 0.5)';
+            
+            const epicId = document.getElementById('epicIdInput').value || "Player";
+            const colText = document.getElementById('collectionCountText').innerText;
+            const mstText = document.getElementById('masteredCountText').innerText;
+            
+            stats.innerHTML = `
+                <div>
+                    <h1 style="margin:0; font-size:40px; font-weight:900; background: linear-gradient(45deg, #ff416c, #ff4b2b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.5px;">SPRITE CHECKLIST</h1>
+                    <p style="margin:4px 0 0 0; color:#4a5568; font-weight:bold; font-size:14px;">${epicId}'s Collection Snapshot</p>
+                </div>
+                <div style="display:flex; gap:30px;">
+                    <div style="text-align:center;">
+                        <div style="font-size:12px; font-weight:bold; color:#718096; text-transform:uppercase;">Collection</div>
+                        <div style="font-size:26px; font-weight:900; color:#2b6cb0;">${colText}</div>
+                    </div>
+                    <div style="text-align:center;">
+                        <div style="font-size:12px; font-weight:bold; color:#718096; text-transform:uppercase;">Mastered</div>
+                        <div style="font-size:26px; font-weight:900; color:#b45309;">${mstText}</div>
+                    </div>
+                </div>
+            `;
+            exportContainer.appendChild(stats);
+
+            const gridClone = document.getElementById('mainLockerGrid').cloneNode(true);
+            gridClone.style.display = 'grid';
+            gridClone.style.gridTemplateColumns = 'repeat(auto-fill, minmax(320px, 1fr))';
+            gridClone.style.gap = '15px';
+            
+            gridClone.querySelectorAll('.card-mini-actions').forEach(el => el.remove());
+            
+            const blocks = gridClone.querySelectorAll('.sprite-card-block');
+            blocks.forEach(block => {
+                let hasVisibleSlot = false;
+                let hasAnyOwnedInCard = false;
+                const matrix = block.querySelector('.sprite-matrix');
+                const slots = block.querySelectorAll('.slot-box');
+                
+                if (filterMode === 'missing' || filterMode === 'unavailable') {
+                    matrix.classList.remove('fixed-grid');
+                    matrix.classList.add('flow-grid');
+                } else {
+                    matrix.classList.remove('flow-grid');
+                    matrix.classList.add('fixed-grid');
+                }
+
+                slots.forEach(slot => {
+                    const isOwned = slot.getAttribute('data-owned') === 'true';
+                    const isBlocked = slot.classList.contains('blocked');
+                    const isUnavailable = slot.classList.contains('unavailable');
+                    const isSingleVariantDisabled = slot.classList.contains('single-variant-disabled');
+                    
+                    if (isSingleVariantDisabled) return;
+
+                    slot.classList.remove('hide-completely', 'invisible-space');
+                    
+                    if (filterMode === 'all') {
+                        hasVisibleSlot = true;
+                    } else if (filterMode === 'available') {
+                        if (isUnavailable || isBlocked) slot.classList.add('invisible-space');
+                        else hasVisibleSlot = true;
+                    } else if (filterMode === 'owned') {
+                        if (isUnavailable || isBlocked) slot.classList.add('invisible-space');
+                        else if (isOwned) { hasVisibleSlot = true; hasAnyOwnedInCard = true; }
+                        else slot.classList.add('invisible-space');
+                    } else if (filterMode === 'missing') {
+                        if (isUnavailable || isBlocked) slot.classList.add('hide-completely');
+                        else if (!isOwned) hasVisibleSlot = true;
+                        else slot.classList.add('hide-completely');
+                    } else if (filterMode === 'unavailable') {
+                        if (isBlocked) hasVisibleSlot = true;
+                        else slot.classList.add('hide-completely');
+                    }
+                });
+                
+                if (filterMode === 'owned') {
+                    if (!hasAnyOwnedInCard) block.classList.add('hide-card-completely');
+                } else {
+                    if (!hasVisibleSlot) block.classList.add('hide-card-completely');
+                }
+            });
+
+            exportContainer.appendChild(gridClone);
+            document.body.appendChild(exportContainer);
+
+            html2canvas(exportContainer, { backgroundColor: null, useCORS: true }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `sprite_collection_${filterMode}.png`;
+                link.href = canvas.toDataURL();
+                link.click();
+                document.body.removeChild(exportContainer);
+            });
+        }
+    </script>
+</body>
+</html>
