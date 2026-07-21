@@ -496,7 +496,7 @@
             pt: {
                 title: "Lista de Espíritos", subTitle: "Rastreie seus espíritos, variantes, níveis, pó e estado de invocação.", epicIdTitle: "ID Epic Games (opcional)", epicIdPlaceholder: "Digitar ID Epic...", lblSpriteDust: "Pó de Espírito", lblDustReq: "Pó Necessário", infoTitle: "Info:", keyLevel: "Adquirido / Nível Atual", keyMastered: "Espírito Dominado", keyMissing: "Faltando", keyNeedsSummon: "Invocação Necessária", keyUnavailable: "Indisponível", raritiesTitle: "Raridades:", rarityRare: "Raro", rarityEpic: "Épico", rarityLegendary: "Lendário", rarityMythic: "Mítico", barCollection: "Progresso da Coleção", barMastered: "Espíritos Dominados", summonTableTitle: "Tabela de Custo de Invocação", costRareNorm: "Raro Normal", costRareVar: "Variante Rara", costEpicNorm: "Épico Normal", costEpicVar: "Variante Épica", costLegNorm: "Lendário Normal", costLegVar: "Variante Lendária", costMythNorm: "Mítico Normal", costMythVar: "Variante Mítica", optFilterAll: "🗂️ Mostrar Tudo", optFilterAvailable: "🔓 Apenas Disponíveis", optFilterOwned: "✅ Apenas Adquiridos", optFilterMissing: "❌ Apenas Faltando", optFilterUnavailable: "🔒 Apenas Indisponíveis", btnCopyText: "📋 Copiar Lista", btnDownloadImg: "📸 Baixar Imagem", btnOwnedAll: "Obter Todos", btnMasterAll: "Dominar Todos", btnResetAll: "Resetar (Faltando)", modalLevelTitle: "Nível / Domínio", modalNeedsSummon: "Precisa Invocação?", btnModalRemove: "Remover Espírito", modalCloseHint: "Clique fora para fechar", exportTitle: "Baixar Captura", btnExportAll: "👁️ Exportar Tudo", btnExportAvail: "🔓 Exportar Disponíveis", btnExportOwned: "✅ Exportar Adquiridos", btnExportMissing: "❌ Exportar Faltando", btnExportCancel: "Cancelar", levelWord: "Nível",
                 variants: { Normal: "Normal", Gold: "Ouro", Gummy: "Goma", Galaxy: "Galáxia", Holo: "Holo", Gem: "Joia", Cube: "Cubo", Quack: "Quack" },
-                spirits: { water: "Água", earth: "Terra", fire: "Fogo", fishy: "Peixe", ar: "Ar", duck: "Pato", ghost: "Fantasma", demon: "Demônio", king: "Rei", striker: "Atacante", aura: "Aura", dream: "Sonho", punk: "Punk", boss: "Chefe", seven: "Sete", peanut: "Amendoim", zp: "Ponto Zero", grim: "Ceifador", batman: "Batman", vini: "Vini Jr.", pollo: "Pollo", john: "John Wick" }
+                spirits: { water: "Água", earth: "Terra", fire: "Fogo", fishy: "Peixe", air: "Ar", duck: "Pato", ghost: "Fantasma", demon: "Demônio", king: "Rei", striker: "Atacante", aura: "Aura", dream: "Sonho", punk: "Punk", boss: "Chefe", seven: "Sete", peanut: "Amendoim", zp: "Ponto Zero", grim: "Ceifador", batman: "Batman", vini: "Vini Jr.", pollo: "Pollo", john: "John Wick" }
             },
             ru: {
                 title: "Чек-лист Духов", subTitle: "Отслеживайте духов, варианты, уровни, пыль и статус призыва.", epicIdTitle: "Epic Games ID (опционально)", epicIdPlaceholder: "Введите Epic ID...", lblSpriteDust: "Пыль Духов", lblDustReq: "Требуется пыли", infoTitle: "Инфо:", keyLevel: "В наличии / Уровень", keyMastered: "Освоенный дух", keyMissing: "Отсутствует", keyNeedsSummon: "Нужен призыв", keyUnavailable: "Недоступно", raritiesTitle: "Редкость:", rarityRare: "Редкий", rarityEpic: "Эпический", rarityLegendary: "Легендарный", rarityMythic: "Мифический", barCollection: "Прогресс коллекции", barMastered: "Освоенные духи", summonTableTitle: "Таблица стоимости призыва", costRareNorm: "Редкий Обычный", costRareVar: "Редкий Вариант", costEpicNorm: "Эпический Обычный", costEpicVar: "Эпический Вариант", costLegNorm: "Легендарный Обычный", costLegVar: "Легендарный Вариант", costMythNorm: "Мифический Обычный", costMythVar: "Мифический Вариант", optFilterAll: "🗂️ Показать все", optFilterAvailable: "🔓 Только доступные", optFilterOwned: "✅ Только в наличии", optFilterMissing: "❌ Только отсутствующие", optFilterUnavailable: "🔒 Только недоступные", btnCopyText: "📋 Скопировать", btnDownloadImg: "📸 Скачать", btnOwnedAll: "Получить все", btnMasterAll: "Освоить все", btnResetAll: "Сбросить", modalLevelTitle: "Уровень / Мастерство", modalNeedsSummon: "Нужен призыв?", btnModalRemove: "Удалить духа", modalCloseHint: "Нажмите снаружи, чтобы закрыть", exportTitle: "Скачать снимок", btnExportAll: "👁️ Экспорт всех", btnExportAvail: "🔓 Экспорт доступных", btnExportOwned: "✅ Экспорт в наличии", btnExportMissing: "❌ Экспорт отсутствующих", btnExportCancel: "Отмена", levelWord: "Уровень",
@@ -699,7 +699,10 @@
                 dustValue: document.getElementById('dustInput').value,
                 slots: {}
             };
-            const slots = document.querySelectorAll('.slot-box:not(.unavailable):not(.blocked)');
+            
+            const mainGrid = document.getElementById('mainLockerGrid');
+            if (!mainGrid) return;
+            const slots = mainGrid.querySelectorAll('.slot-box:not(.unavailable):not(.blocked)');
             
             slots.forEach(slot => {
                 const parent = slot.closest('.sprite-card-block');
@@ -852,7 +855,9 @@
         }
 
         function triggerMassiveAction(actionType) {
-            const slots = document.querySelectorAll('.slot-box:not(.unavailable):not(.blocked):not(.single-variant-disabled)');
+            const mainGrid = document.getElementById('mainLockerGrid');
+            if (!mainGrid) return;
+            const slots = mainGrid.querySelectorAll('.slot-box:not(.unavailable):not(.blocked):not(.single-variant-disabled)');
             slots.forEach(slot => { applyActionToSlot(slot, actionType); });
             recalculateMetrics();
             filterLockerView(document.getElementById('viewFilterSelect').value);
@@ -1038,7 +1043,10 @@
         }
 
         function recalculateMetrics() {
-            const allSlots = document.querySelectorAll('.slot-box:not(.unavailable):not(.blocked):not(.single-variant-disabled)');
+            const mainGrid = document.getElementById('mainLockerGrid');
+            if (!mainGrid) return;
+            
+            const allSlots = mainGrid.querySelectorAll('.slot-box:not(.unavailable):not(.blocked):not(.single-variant-disabled)');
             let totalAvailable = allSlots.length;
             let totalOwned = 0;
             let totalMastered = 0;
@@ -1236,15 +1244,16 @@
         function openExportDialog() { document.getElementById('exportOverlay').style.display = 'flex'; }
         function closeExportDialog() { document.getElementById('exportOverlay').style.display = 'none'; }
         
-        /* SISTEMA DE CAPTURA MEJORADO */
+        /* SISTEMA DE CAPTURA 100% LIMPIO Y AISLADO */
         function takeScreenshot(filterMode) {
             closeExportDialog();
 
             const exportContainer = document.createElement('div');
+            exportContainer.id = 'screenshotExportContainer';
             exportContainer.style.position = 'fixed';
             exportContainer.style.top = '0';
             exportContainer.style.left = '0';
-            exportContainer.style.width = '1200px'; 
+            exportContainer.style.width = '1280px';
             exportContainer.style.background = 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #a1c4fd 100%)';
             exportContainer.style.padding = '30px';
             exportContainer.style.fontFamily = "'Poppins', sans-serif";
@@ -1284,15 +1293,20 @@
             `;
             exportContainer.appendChild(stats);
 
-            const gridClone = document.getElementById('mainLockerGrid').cloneNode(true);
+            const mainGrid = document.getElementById('mainLockerGrid');
+            const gridClone = mainGrid.cloneNode(true);
+            gridClone.id = 'exportedGridClone';
             gridClone.style.display = 'grid';
-            gridClone.style.gridTemplateColumns = 'repeat(auto-fill, minmax(320px, 1fr))';
+            gridClone.style.gridTemplateColumns = 'repeat(3, 1fr)';
             gridClone.style.gap = '15px';
             
             gridClone.querySelectorAll('.card-mini-actions').forEach(el => el.remove());
             
             const blocks = gridClone.querySelectorAll('.sprite-card-block');
             blocks.forEach(block => {
+                block.style.zoom = '1';
+                block.style.transform = 'none';
+
                 let hasVisibleSlot = false;
                 let hasAnyOwnedInCard = false;
                 const matrix = block.querySelector('.sprite-matrix');
@@ -1348,17 +1362,16 @@
             html2canvas(exportContainer, {
                 backgroundColor: null,
                 useCORS: true,
-                allowTaint: true,
                 scale: 2,
-                windowWidth: 1200
+                windowWidth: 1280
             }).then(canvas => {
                 const link = document.createElement('a');
                 link.download = `sprite_collection_${filterMode}.png`;
                 link.href = canvas.toDataURL('image/png');
                 link.click();
-                document.body.removeChild(exportContainer);
             }).catch(err => {
                 console.error("Error generating screenshot:", err);
+            }).finally(() => {
                 if (document.body.contains(exportContainer)) {
                     document.body.removeChild(exportContainer);
                 }
