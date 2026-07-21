@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sprite Checklist - Summer Season Panel</title>
-    <!-- Carga local directa de html2canvas desde tu propio repositorio -->
+    <!-- Carga local de html2canvas -->
     <script src="html2canvas.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,600;0,700;0,800;0,900;1,800&display=swap');
@@ -168,22 +168,31 @@
         .slot-box.blocked .slot-inner { opacity: 0.5 !important; filter: none !important; } 
         .blocked-overlay { position: absolute; bottom: 3px; right: 3px; z-index: 5; opacity: 0.8; width: 14px; height: 14px; }
         
+        /* Estado Faltante (Not Owned) */
         .slot-box.not-owned:not(.blocked):not(.unavailable) { background: #222533 !important; border-color: #3b4259 !important; }
-        .slot-box.not-owned:not(.blocked):not(.unavailable) .slot-inner img { filter: brightness(0.6) contrast(1.1) !important; opacity: 0.85 !important; }
+        .slot-box.not-owned:not(.blocked):not(.unavailable) .slot-inner img { filter: brightness(0.5) contrast(1.1) !important; opacity: 0.6 !important; }
         .slot-box.not-owned .level-badge, .slot-box.not-owned .mini-crown { display: none !important; }
+
+        /* Ícono de Equis para Missing */
+        .missing-overlay { position: absolute; width: 20px; height: 20px; z-index: 5; opacity: 0.85; pointer-events: none; }
+        .slot-box:not(.not-owned) .missing-overlay,
+        .slot-box.blocked .missing-overlay,
+        .slot-box.unavailable .missing-overlay { display: none !important; }
         
         .slot-box.needs-summon:not(.blocked) { border-color: #94a3b8 !important; background: linear-gradient(135deg, #4a5568, #2d3748) !important; }
         .slot-box.needs-summon:not(.blocked) .slot-inner { filter: brightness(0.6) grayscale(0.2) !important; }
         
+        /* Borde Limpio y Delgado para Mastered */
         .slot-box.has-crown::after {
             content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            box-shadow: inset 0 0 12px 2px rgba(234, 179, 8, 0.7); border-radius: 3px; pointer-events: none; z-index: 4;
+            border: 2px solid #eab308; border-radius: 3px; pointer-events: none; z-index: 2;
+            box-shadow: inset 0 0 3px rgba(234, 179, 8, 0.4);
         }
 
         .slot-inner { width: 95%; height: 95%; display: flex; align-items: center; justify-content: center; z-index: 1; }
         .slot-inner img { width: 95%; height: 95%; object-fit: contain; }
         
-        /* Etiquetas de variantes con colores perfeccionados */
+        /* Etiquetas de variantes */
         .variant-tag { position: absolute; top: 3px; left: 3px; font-size: 8px; font-weight: 800; text-transform: uppercase; padding: 1px 4px; border-radius: 2px; z-index: 4; color: #ffffff; text-shadow: 0 1px 2px rgba(0,0,0,0.6); }
         .slot-box[data-rarity-origin="Rare"] .variant-tag { background: var(--rarity-rare); }
         .slot-box[data-rarity-origin="Epic"] .variant-tag { background: var(--rarity-epic); }
@@ -201,7 +210,7 @@
         .mini-crown img { width: 100%; height: 100%; object-fit: contain; }
         .slot-box.has-crown .mini-crown { display: block; }
 
-        /* Insignia de Nivel Limpia */
+        /* Insignia de Nivel */
         .level-badge { 
             position: absolute; bottom: 0px; left: 0px; 
             background: #ffffff !important; color: #0f172a !important;
@@ -504,7 +513,7 @@
                 spirits: { water: "Вода", earth: "Земля", fire: "Огонь", fishy: "Рыбка", air: "Воздух", duck: "Утка", ghost: "Призрак", demon: "Демон", king: "Король", striker: "Страйкер", aura: "Аура", dream: "Сон", punk: "Панк", boss: "Босс", seven: "Семь", peanut: "Арахис", zp: "Нулевая Точка", grim: "Жнец", batman: "Бэтмен", vini: "Вини Мл.", pollo: "Полло", john: "Джон Уик" }
             },
             ja: {
-                title: "精霊チェックリスト", subTitle: "精霊、バリアント、レベル、ダスト、召喚状態を追跡します。", epicIdTitle: "Epic Games ID (任意)", epicIdPlaceholder: "Epic IDを入力...", lblSpriteDust: "精霊のダスト", lblDustReq: "必要ダスト", infoTitle: "情報:", keyLevel: "所持 / glass現在レベル", keyMastered: "マスター済み", keyMissing: "未所持", keyNeedsSummon: "要再召喚", keyUnavailable: "利用不可", raritiesTitle: "レア度:", rarityRare: "レア", rarityEpic: "エピック", rarityLegendary: "レジェンド", rarityMythic: "ミシック", barCollection: "コレクション進行度", barMastered: "マスター済み精霊", summonTableTitle: "召喚コスト参照表", costRareNorm: "レア 通常", costRareVar: "レア バリアント", costEpicNorm: "エピック 通常", costEpicVar: "エピック バリアント", costLegNorm: "レジェンド 通常", costLegVar: "レジェンド バリアント", costMythNorm: "ミシック 通常", costMythVar: "ミシック バリアント", optFilterAll: "🗂️ すべて表示", optFilterAvailable: "🔓 利用可能のみ", optFilterOwned: "✅ 所持のみ", optFilterMissing: "❌ 未所持のみ", optFilterUnavailable: "🔒 利用不可のみ", btnCopyText: "📋 リストをコピー", btnDownloadImg: "📸 画像をダウンロード", btnOwnedAll: "すべて所持", btnMasterAll: "すべてマスター", btnResetAll: "リセット", modalLevelTitle: "レベル / マスタリー", modalNeedsSummon: "再召喚が必要？", btnModalRemove: "精霊を削除", modalCloseHint: "枠外をクリックして閉じる", exportTitle: "スナップショットを保存", btnExportAll: "👁️ すべてエクスポート", btnExportOwned: "✅ 所持をエクスポート", btnExportMissing: "❌ 未所持をエクスポート", btnExportCancel: "キャンセル", levelWord: "レベル",
+                title: "精霊チェックリスト", subTitle: "精霊、バリアント、レベル、ダスト、召喚状態を追跡します。", epicIdTitle: "Epic Games ID (任意)", epicIdPlaceholder: "Epic IDを入力...", lblSpriteDust: "精霊のダスト", lblDustReq: "必要ダスト", infoTitle: "情報:", keyLevel: "所持 / 現在レベル", keyMastered: "マスター済み", keyMissing: "未所持", keyNeedsSummon: "要再召喚", keyUnavailable: "利用不可", raritiesTitle: "レア度:", rarityRare: "レア", rarityEpic: "エピック", rarityLegendary: "レジェンド", rarityMythic: "ミシック", barCollection: "コレクション進行度", barMastered: "マスター済み精霊", summonTableTitle: "召喚コスト参照表", costRareNorm: "レア 通常", costRareVar: "レア バリアント", costEpicNorm: "エピック 通常", costEpicVar: "エピック バリアント", costLegNorm: "レジェンド 通常", costLegVar: "レジェンド バリアント", costMythNorm: "ミシック 通常", costMythVar: "ミシック バリアント", optFilterAll: "🗂️ すべて表示", optFilterAvailable: "🔓 利用可能のみ", optFilterOwned: "✅ 所持のみ", optFilterMissing: "❌ 未所持のみ", optFilterUnavailable: "🔒 利用不可のみ", btnCopyText: "📋 リストをコピー", btnDownloadImg: "📸 画像をダウンロード", btnOwnedAll: "すべて所持", btnMasterAll: "すべてマスター", btnResetAll: "リセット", modalLevelTitle: "レベル / マスタリー", modalNeedsSummon: "再召喚が必要？", btnModalRemove: "精霊を削除", modalCloseHint: "枠外をクリックして閉じる", exportTitle: "スナップショットを保存", btnExportAll: "👁️ すべてエクスポート", btnExportOwned: "✅ 所持をエクスポート", btnExportMissing: "❌ 未所持をエクスポート", btnExportCancel: "キャンセル", levelWord: "レベル",
                 variants: { Normal: "ノーマル", Gold: "ゴールド", Gummy: "グミ", Galaxy: "ギャラクシー", Holo: "ホロ", Gem: "ジェム", Cube: "キューブ", Quack: "クワック" },
                 spirits: { water: "水", earth: "土", fire: "火", fishy: "魚", air: "風", duck: "アヒル", ghost: "ゴースト", demon: "悪魔", king: "キング", striker: "ストライカー", aura: "オーラ", dream: "夢", punk: "パンク", boss: "ボス", seven: "セブン", peanut: "ピーナッツ", zp: "ゼロポイント", grim: "死神", batman: "バットマン", vini: "ヴィニJr.", pollo: "ポージョ", john: "ジョン・ウィック" }
             },
@@ -846,6 +855,7 @@
             slot.innerHTML = `
                 <div class="variant-tag">${displayTagText}</div>
                 <span class="mini-crown"><img src="crown1.webp" alt="👑"></span>
+                <img src="red.webp" alt="❌" class="missing-overlay">
                 <div class="slot-inner"><img src="${imgName}" alt="${sprite.name} ${displayTagText}" onerror="this.style.display='none'"></div>
                 ${extraHTML}
                 <div class="level-badge">Level 1</div>`;
@@ -1246,60 +1256,69 @@
         function openExportDialog() { document.getElementById('exportOverlay').style.display = 'flex'; }
         function closeExportDialog() { document.getElementById('exportOverlay').style.display = 'none'; }
         
-        /* SISTEMA DE CAPTURA LOCAL SILENCIOSO Y DESCARGA GARANTIZADA */
+        /* SISTEMA DE CAPTURA HORIZONTAL, SILENCIOSO E INSTANTÁNEO */
         async function takeScreenshot(filterMode) {
             closeExportDialog();
 
-            // Verificación previa de seguridad por si no se encuentra el archivo local de la librería
             if (typeof html2canvas === 'undefined') {
-                alert(currentLang === 'es' ? "No se encontró la librería html2canvas.min.js. Asegúrate de haber guardado ese archivo en la raíz de tu repositorio." : "The html2canvas.min.js library was not found. Make sure you saved that file in your repository root.");
+                alert(currentLang === 'es' ? "No se encontró el archivo html2canvas.min.js en el servidor." : "html2canvas.min.js file not found on server.");
                 return;
             }
 
-            // 1. Pantalla de carga completa
-            const loadingOverlay = document.createElement('div');
-            loadingOverlay.id = 'screenshotLoadingOverlay';
-            loadingOverlay.style.cssText = 'position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(15,23,42,0.85); backdrop-filter:blur(5px); display:flex; flex-direction:column; justify-content:center; align-items:center; color:white; font-family:Poppins,sans-serif; font-weight:bold; font-size:18px; z-index:1000000; gap:12px;';
-            loadingOverlay.innerHTML = `
-                <div style="font-size:32px;">📸</div>
-                <div>${currentLang === 'es' ? 'Generando captura...' : 'Generating snapshot...'}</div>
-            `;
-            document.body.appendChild(loadingOverlay);
-
-            // 2. Contenedor de renderizado ubicado tras bambalinas
+            // Contenedor fuera de pantalla (horizontal de 1920px)
             const exportContainer = document.createElement('div');
-            exportContainer.style.cssText = 'position:fixed; top:0; left:0; width:1280px; background:linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #a1c4fd 100%); padding:30px; font-family:Poppins,sans-serif; color:#2d3748; box-sizing:border-box; z-index:999999; opacity:1; overflow:visible;';
+            exportContainer.style.cssText = 'position:fixed; left:-9999px; top:-9999px; width:1920px; background:linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #a1c4fd 100%); padding:25px; font-family:Poppins,sans-serif; color:#2d3748; box-sizing:border-box; z-index:-9999;';
 
-            // 3. Encabezado de la imagen
-            const stats = document.createElement('div');
-            stats.style.cssText = 'display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; background:rgba(255,255,255,0.9); padding:20px; border-radius:10px; border:1px solid rgba(255,255,255,0.5);';
-            
-            const epicId = document.getElementById('epicIdInput').value || "Player";
+            const epicIdVal = document.getElementById('epicIdInput').value.trim();
+            const epicLabel = epicIdVal ? `Epic ID: ${epicIdVal}` : '';
+            const dustVal = document.getElementById('dustInput').value || '0';
+            const dustReqVal = document.getElementById('dustRequiredVal').innerText || '0';
             const colText = document.getElementById('collectionCountText').innerText;
             const mstText = document.getElementById('masteredCountText').innerText;
-            
+
+            // Encabezado mejorado de la captura
+            const stats = document.createElement('div');
+            stats.style.cssText = 'background:rgba(255,255,255,0.92); border-radius:14px; padding:18px 25px; margin-bottom:20px; border:1px solid rgba(255,255,255,0.7); box-shadow:0 8px 16px rgba(0,0,0,0.06);';
             stats.innerHTML = `
-                <div>
-                    <h1 style="margin:0; font-size:36px; font-weight:900; background: linear-gradient(45deg, #ff416c, #ff4b2b); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">SPRITE CHECKLIST</h1>
-                    <p style="margin:4px 0 0 0; color:#4a5568; font-weight:bold; font-size:13px;">${epicId}'s Collection Snapshot</p>
+                <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #e2e8f0; padding-bottom:12px; margin-bottom:12px;">
+                    <div>
+                        <h1 style="margin:0; font-size:32px; font-weight:900; background: linear-gradient(45deg, #ff416c, #ff4b2b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing:-0.5px;">SPRITE CHECKLIST</h1>
+                        <div style="font-size:14px; font-weight:800; color:#334155; margin-top:2px;">${epicLabel}</div>
+                    </div>
+                    <div style="display:flex; gap:20px; align-items:center;">
+                        <div style="background:#fff; border:1px solid #e2e8f0; padding:6px 14px; border-radius:10px; text-align:center;">
+                            <div style="font-size:9px; font-weight:800; color:#718096; text-transform:uppercase;">Sprite Dust <img src="dust.webp" style="width:12px; vertical-align:middle;"></div>
+                            <div style="font-size:16px; font-weight:800; color:#f472b6;">${dustVal}</div>
+                        </div>
+                        <div style="background:#fff; border:1px solid #e2e8f0; padding:6px 14px; border-radius:10px; text-align:center;">
+                            <div style="font-size:9px; font-weight:800; color:#718096; text-transform:uppercase;">Dust Required <img src="dust.webp" style="width:12px; vertical-align:middle;"></div>
+                            <div style="font-size:16px; font-weight:800; color:#ca9626;">${dustReqVal}</div>
+                        </div>
+                        <div style="background:#fff; border:1px solid #e2e8f0; padding:6px 14px; border-radius:10px; text-align:center;">
+                            <div style="font-size:9px; font-weight:800; color:#718096; text-transform:uppercase;">Collection</div>
+                            <div style="font-size:16px; font-weight:900; color:#2b6cb0;">${colText}</div>
+                        </div>
+                        <div style="background:#fff; border:1px solid #e2e8f0; padding:6px 14px; border-radius:10px; text-align:center;">
+                            <div style="font-size:9px; font-weight:800; color:#718096; text-transform:uppercase;">Mastered</div>
+                            <div style="font-size:16px; font-weight:900; color:#b45309;">${mstText}</div>
+                        </div>
+                    </div>
                 </div>
-                <div style="display:flex; gap:25px;">
-                    <div style="text-align:center;">
-                        <div style="font-size:11px; font-weight:bold; color:#718096; text-transform:uppercase;">Collection</div>
-                        <div style="font-size:22px; font-weight:900; color:#2b6cb0;">${colText}</div>
-                    </div>
-                    <div style="text-align:center;">
-                        <div style="font-size:11px; font-weight:bold; color:#718096; text-transform:uppercase;">Mastered</div>
-                        <div style="font-size:22px; font-weight:900; color:#b45309;">${mstText}</div>
-                    </div>
+                <!-- Guía explicativa integrada -->
+                <div style="display:flex; gap:20px; align-items:center; font-size:11px; font-weight:700; color:#475569;">
+                    <div style="display:flex; align-items:center; gap:5px;"><span style="background:#fff; border:1px solid #cbd5e1; border-bottom:2px solid #3b82f6; padding:1px 5px; font-size:9px; border-radius:3px; font-style:italic;">Level X</span> Owned</div>
+                    <div style="display:flex; align-items:center; gap:5px;"><img src="crown.webp" style="width:14px;"> Mastered</div>
+                    <div style="display:flex; align-items:center; gap:5px;"><img src="red.webp" style="width:14px;"> Missing</div>
+                    <div style="display:flex; align-items:center; gap:5px;"><span style="background:#4a5568; color:#fff; padding:1px 5px; font-size:9px; border-radius:3px;">Needs Summon</span> Summon Required</div>
+                    <div style="display:flex; align-items:center; gap:5px;"><img src="lock.webp" style="width:12px;"> Unavailable</div>
                 </div>
             `;
             exportContainer.appendChild(stats);
 
-            // 4. Clonar la cuadrícula original
+            // Clon de la cuadrícula a 5 columnas (Horizontal layout)
             const mainGrid = document.getElementById('mainLockerGrid');
             const gridClone = mainGrid.cloneNode(true);
-            gridClone.style.cssText = 'display:grid; grid-template-columns: repeat(3, 1fr); gap:15px; width:100%; box-sizing:border-box;';
+            gridClone.style.cssText = 'display:grid; grid-template-columns: repeat(5, 1fr); gap:12px; width:100%; box-sizing:border-box;';
             
             gridClone.querySelectorAll('.card-mini-actions').forEach(el => el.remove());
             
@@ -1361,17 +1380,14 @@
             exportContainer.appendChild(gridClone);
             document.body.appendChild(exportContainer);
 
-            // Breve espera para cálculo de geometrías
-            await new Promise(resolve => setTimeout(resolve, 200));
-
             try {
                 const canvas = await html2canvas(exportContainer, {
                     backgroundColor: '#fecfef',
-                    scale: 2,
+                    scale: 1.5,
                     logging: false,
                     useCORS: false,
                     allowTaint: true,
-                    windowWidth: 1280
+                    windowWidth: 1920
                 });
 
                 const dataUrl = canvas.toDataURL('image/png');
@@ -1383,10 +1399,8 @@
                 document.body.removeChild(link);
             } catch (err) {
                 console.error("Error al generar captura:", err);
-                alert("Ocurrió un error al procesar la captura: " + err.message);
             } finally {
                 if (document.body.contains(exportContainer)) document.body.removeChild(exportContainer);
-                if (document.body.contains(loadingOverlay)) document.body.removeChild(loadingOverlay);
             }
         }
     </script>
