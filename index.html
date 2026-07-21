@@ -1097,7 +1097,10 @@
         }
 
         function filterLockerView(mode) {
-            const blocks = document.querySelectorAll('.sprite-card-block');
+            const mainGrid = document.getElementById('mainLockerGrid');
+            if (!mainGrid) return;
+            const blocks = mainGrid.querySelectorAll('.sprite-card-block');
+            
             blocks.forEach(block => {
                 let hasVisibleSlot = false;
                 let hasAnyOwnedInCard = false;
@@ -1244,32 +1247,23 @@
         function openExportDialog() { document.getElementById('exportOverlay').style.display = 'flex'; }
         function closeExportDialog() { document.getElementById('exportOverlay').style.display = 'none'; }
         
-        /* SISTEMA DE CAPTURA 100% LIMPIO Y AISLADO */
+        /* SISTEMA DE CAPTURA 100% LIMPIO, ALINEADO Y SIN BUGS */
         function takeScreenshot(filterMode) {
             closeExportDialog();
 
-            const exportContainer = document.createElement('div');
-            exportContainer.id = 'screenshotExportContainer';
-            exportContainer.style.position = 'fixed';
-            exportContainer.style.top = '0';
-            exportContainer.style.left = '0';
-            exportContainer.style.width = '1280px';
-            exportContainer.style.background = 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #a1c4fd 100%)';
-            exportContainer.style.padding = '30px';
-            exportContainer.style.fontFamily = "'Poppins', sans-serif";
-            exportContainer.style.color = '#2d3748';
-            exportContainer.style.boxSizing = 'border-box';
-            exportContainer.style.zIndex = '-9999';
+            // 1. Mensaje flotante de procesando
+            const loadingMsg = document.createElement('div');
+            loadingMsg.innerText = currentLang === 'es' ? '📸 Generando captura...' : '📸 Generating snapshot...';
+            loadingMsg.style.cssText = 'position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:rgba(15,23,42,0.9); color:white; padding:16px 28px; border-radius:12px; font-weight:bold; font-size:15px; z-index:100000; font-family:Poppins,sans-serif; box-shadow:0 10px 25px rgba(0,0,0,0.3);';
+            document.body.appendChild(loadingMsg);
 
+            // 2. Contenedor de renderizado sobrepuesto
+            const exportContainer = document.createElement('div');
+            exportContainer.style.cssText = 'position:fixed; top:0; left:0; width:1280px; background:linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #a1c4fd 100%); padding:30px; font-family:Poppins,sans-serif; color:#2d3748; box-sizing:border-box; z-index:99999; overflow:visible;';
+
+            // 3. Encabezado de la imagen
             const stats = document.createElement('div');
-            stats.style.display = 'flex';
-            stats.style.justifyContent = 'space-between';
-            stats.style.alignItems = 'center';
-            stats.style.marginBottom = '20px';
-            stats.style.background = 'rgba(255,255,255,0.9)';
-            stats.style.padding = '20px';
-            stats.style.borderRadius = '10px';
-            stats.style.border = '1px solid rgba(255, 255, 255, 0.5)';
+            stats.style.cssText = 'display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; background:rgba(255,255,255,0.9); padding:20px; border-radius:10px; border:1px solid rgba(255,255,255,0.5);';
             
             const epicId = document.getElementById('epicIdInput').value || "Player";
             const colText = document.getElementById('collectionCountText').innerText;
@@ -1277,35 +1271,32 @@
             
             stats.innerHTML = `
                 <div>
-                    <h1 style="margin:0; font-size:40px; font-weight:900; background: linear-gradient(45deg, #ff416c, #ff4b2b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.5px;">SPRITE CHECKLIST</h1>
-                    <p style="margin:4px 0 0 0; color:#4a5568; font-weight:bold; font-size:14px;">${epicId}'s Collection Snapshot</p>
+                    <h1 style="margin:0; font-size:36px; font-weight:900; background: linear-gradient(45deg, #ff416c, #ff4b2b); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">SPRITE CHECKLIST</h1>
+                    <p style="margin:4px 0 0 0; color:#4a5568; font-weight:bold; font-size:13px;">${epicId}'s Collection Snapshot</p>
                 </div>
-                <div style="display:flex; gap:30px;">
+                <div style="display:flex; gap:25px;">
                     <div style="text-align:center;">
-                        <div style="font-size:12px; font-weight:bold; color:#718096; text-transform:uppercase;">Collection</div>
-                        <div style="font-size:26px; font-weight:900; color:#2b6cb0;">${colText}</div>
+                        <div style="font-size:11px; font-weight:bold; color:#718096; text-transform:uppercase;">Collection</div>
+                        <div style="font-size:22px; font-weight:900; color:#2b6cb0;">${colText}</div>
                     </div>
                     <div style="text-align:center;">
-                        <div style="font-size:12px; font-weight:bold; color:#718096; text-transform:uppercase;">Mastered</div>
-                        <div style="font-size:26px; font-weight:900; color:#b45309;">${mstText}</div>
+                        <div style="font-size:11px; font-weight:bold; color:#718096; text-transform:uppercase;">Mastered</div>
+                        <div style="font-size:22px; font-weight:900; color:#b45309;">${mstText}</div>
                     </div>
                 </div>
             `;
             exportContainer.appendChild(stats);
 
+            // 4. Clonar la cuadrícula original limpiando estilos de zoom
             const mainGrid = document.getElementById('mainLockerGrid');
             const gridClone = mainGrid.cloneNode(true);
-            gridClone.id = 'exportedGridClone';
-            gridClone.style.display = 'grid';
-            gridClone.style.gridTemplateColumns = 'repeat(3, 1fr)';
-            gridClone.style.gap = '15px';
+            gridClone.style.cssText = 'display:grid; grid-template-columns: repeat(3, 1fr); gap:15px; width:100%; box-sizing:border-box;';
             
             gridClone.querySelectorAll('.card-mini-actions').forEach(el => el.remove());
             
             const blocks = gridClone.querySelectorAll('.sprite-card-block');
             blocks.forEach(block => {
-                block.style.zoom = '1';
-                block.style.transform = 'none';
+                block.style.cssText += 'zoom: 1 !important; transform: none !important; margin: 0 !important; width: 100% !important; box-sizing: border-box !important;';
 
                 let hasVisibleSlot = false;
                 let hasAnyOwnedInCard = false;
@@ -1359,23 +1350,31 @@
             exportContainer.appendChild(gridClone);
             document.body.appendChild(exportContainer);
 
-            html2canvas(exportContainer, {
-                backgroundColor: null,
-                useCORS: true,
-                scale: 2,
-                windowWidth: 1280
-            }).then(canvas => {
-                const link = document.createElement('a');
-                link.download = `sprite_collection_${filterMode}.png`;
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-            }).catch(err => {
-                console.error("Error generating screenshot:", err);
-            }).finally(() => {
-                if (document.body.contains(exportContainer)) {
-                    document.body.removeChild(exportContainer);
-                }
-            });
+            // 5. Renderizado en alta resolución con html2canvas
+            setTimeout(() => {
+                html2canvas(exportContainer, {
+                    backgroundColor: '#fecfef',
+                    useCORS: true,
+                    scale: 2,
+                    scrollX: 0,
+                    scrollY: 0,
+                    windowWidth: 1280
+                }).then(canvas => {
+                    const link = document.createElement('a');
+                    link.download = `sprite_collection_${filterMode}.png`;
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                }).catch(err => {
+                    console.error("Error generating screenshot:", err);
+                }).finally(() => {
+                    if (document.body.contains(exportContainer)) {
+                        document.body.removeChild(exportContainer);
+                    }
+                    if (document.body.contains(loadingMsg)) {
+                        document.body.removeChild(loadingMsg);
+                    }
+                });
+            }, 250);
         }
     </script>
 </body>
