@@ -483,7 +483,7 @@
                 spirits: { water: "Wasser", earth: "Erde", fire: "Feuer", fishy: "Fischig", air: "Luft", duck: "Ente", ghost: "Geist", demon: "Dämon", king: "König", striker: "Stürmer", aura: "Aura", dream: "Traum", punk: "Punk", boss: "Boss", seven: "Sieben", peanut: "Verbrannte Erdnuss", zp: "Nullpunkt", grim: "Sensenmann", batman: "Batman", vini: "Vini Jr.", pollo: "Pollo", john: "John Wick" }
             },
             fr: {
-                title: "Check-list des Esprits", subTitle: "Suivez vos esprits, variantes, niveaux, poussière et état d'invocation.", epicIdTitle: "ID Epic Games (optionnel)", epicIdPlaceholder: "Entrez ID Epic...", lblSpriteDust: "Poussière d'Esprit", lblDustReq: "Poussière Requise", infoTitle: "Info:", keyLevel: "Possédé / Niveau Actuel", keyMastered: "Esprit Maîtrisé", keyMissing: "Manquant", keyNeedsSummon: "Invoc. Nécessaire", keyUnavailable: "Indisponible", raritiesTitle: "Raretés:", rarityRare: "Rare", rarityEpic: "Épique", rarityLegendary: "Légendaire", rarityMythic: "Mythique", barCollection: "Progrès Collection", barMastered: "Esprits Maîtrisés", summonTableTitle: "Tableau de Coût d'Invocation", costRareNorm: "Rare Normal", costRareVar: "Variante Rare", costEpicNorm: "Épique Normal", costEpicVar: "Variante Épique", costLegNorm: "Légendaire Normal", costLegVar: "Variante Légendaire", costMythNorm: "Mythique Normal", costMythVar: "Variante Mythique", optFilterAll: "🗂️ Tout afficher", optFilterAvailable: "🔓 Disponibles uniquem.", optFilterOwned: "✅ Possédés uniquem.", optFilterMissing: "❌ Manquants uniquem.", optFilterUnavailable: "🔒 Indisponibles uniquem.", btnCopyText: "📋 Copier la liste", btnDownloadImg: "📸 Télécharger l'image", btnOwnedAll: "Tous posséder", btnMasterAll: "Tous maîtriser", btnResetAll: "Réinitialiser (Manquants)", modalLevelTitle: "Niveau / Maîtrise", modalNeedsSummon: "Invocation nécessaire ?", btnModalRemove: "Retirer l'esprit", modalCloseHint: "Cliquez à l'extérieur pour fermer", exportTitle: "Télécharger la capture", btnExportAll: "👁️ Tout exporter", btnExportOwned: "✅ Exporter possédés", btnExportMissing: "❌ Exporter manquants", btnExportCancel: "Annuler", levelWord: "Niveau",
+                title: "Check-list des Esprits", subTitle: "Suivez vos esprits, variantes, niveaux, poussière et état d'invocation.", epicIdTitle: "ID Epic Games (optionnel)", epicIdPlaceholder: "Entrez ID Epic...", lblSpriteDust: "Poussière d'Esprit", lblDustReq: "Poussière Requise", infoTitle: "Info:", keyLevel: "Possédé / Niveau Actuel", keyMastered: "Esprit Maîtrisé", keyMissing: "Manquant", keyNeedsSummon: "Invoc. Nécessaire", keyUnavailable: "Indisponibilité", raritiesTitle: "Raretés:", rarityRare: "Rare", rarityEpic: "Épique", rarityLegendary: "Légendaire", rarityMythic: "Mythique", barCollection: "Progrès Collection", barMastered: "Esprits Maîtrisés", summonTableTitle: "Tableau de Coût d'Invocation", costRareNorm: "Rare Normal", costRareVar: "Variante Rare", costEpicNorm: "Épique Normal", costEpicVar: "Variante Épique", costLegNorm: "Légendaire Normal", costLegVar: "Variante Légendaire", costMythNorm: "Mythique Normal", costMythVar: "Variante Mythique", optFilterAll: "🗂️ Tout afficher", optFilterAvailable: "🔓 Disponibles uniquem.", optFilterOwned: "✅ Possédés uniquem.", optFilterMissing: "❌ Manquants uniquem.", optFilterUnavailable: "🔒 Indisponibles uniquem.", btnCopyText: "📋 Copier la liste", btnDownloadImg: "📸 Télécharger l'image", btnOwnedAll: "Tous posséder", btnMasterAll: "Tous maîtriser", btnResetAll: "Réinitialiser (Manquants)", modalLevelTitle: "Niveau / Maîtrise", modalNeedsSummon: "Invocation nécessaire ?", btnModalRemove: "Retirer l'esprit", modalCloseHint: "Cliquez à l'extérieur pour fermer", exportTitle: "Télécharger la capture", btnExportAll: "👁️ Tout exporter", btnExportOwned: "✅ Exporter possédés", btnExportMissing: "❌ Exporter manquants", btnExportCancel: "Annuler", levelWord: "Niveau",
                 variants: { Normal: "Normal", Gold: "Or", Gummy: "Gomme", Galaxy: "Galaxie", Holo: "Holo", Gem: "Gemme", Cube: "Cube", Quack: "Couac" },
                 spirits: { water: "Eau", earth: "Terre", fire: "Feu", fishy: "Poisson", air: "Air", duck: "Canard", ghost: "Fantôme", demon: "Démon", king: "Roi", striker: "Buteur", aura: "Aura", dream: "Rêve", punk: "Punk", boss: "Boss", seven: "Sept", peanut: "Cacahuète Brûlée", zp: "Point Zéro", grim: "Faucheuse", batman: "Batman", vini: "Vini Jr.", pollo: "Pollo", john: "John Wick" }
             },
@@ -1249,17 +1249,17 @@
         async function takeScreenshot(filterMode) {
             closeExportDialog();
 
-            // 1. Notificación flotante pequeña y no intrusiva
+            // 1. Notificación flotante pequeña
             const loadingMsg = document.createElement('div');
             loadingMsg.innerText = currentLang === 'es' ? '📸 Generando captura...' : '📸 Generating snapshot...';
             loadingMsg.style.cssText = 'position:fixed; top:20px; right:20px; background:rgba(15,23,42,0.9); color:white; padding:12px 24px; border-radius:20px; font-weight:bold; font-size:13px; z-index:100000; font-family:Poppins,sans-serif; box-shadow:0 10px 25px rgba(0,0,0,0.3); pointer-events:none;';
             document.body.appendChild(loadingMsg);
 
-            // 2. Contenedor invisible fuera de pantalla
+            // 2. Contenedor invisible para renderizado
             const exportContainer = document.createElement('div');
-            exportContainer.style.cssText = 'position:absolute; left:-9999px; top:0; width:1280px; background:linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #a1c4fd 100%); padding:30px; font-family:Poppins,sans-serif; color:#2d3748; box-sizing:border-box; overflow:hidden;';
+            exportContainer.style.cssText = 'position:fixed; top:0; left:0; width:1280px; background:linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #a1c4fd 100%); padding:30px; font-family:Poppins,sans-serif; color:#2d3748; box-sizing:border-box; z-index:-1; opacity:0.01; pointer-events:none;';
 
-            // 3. Encabezado de la imagen
+            // 3. Encabezado
             const stats = document.createElement('div');
             stats.style.cssText = 'display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; background:rgba(255,255,255,0.9); padding:20px; border-radius:10px; border:1px solid rgba(255,255,255,0.5);';
             
@@ -1285,7 +1285,7 @@
             `;
             exportContainer.appendChild(stats);
 
-            // 4. Clonar la cuadrícula original limpiando estilos
+            // 4. Clonar cuadrícula y limpiar
             const mainGrid = document.getElementById('mainLockerGrid');
             const gridClone = mainGrid.cloneNode(true);
             gridClone.style.cssText = 'display:grid; grid-template-columns: repeat(3, 1fr); gap:15px; width:100%; box-sizing:border-box;';
@@ -1350,26 +1350,47 @@
             exportContainer.appendChild(gridClone);
             document.body.appendChild(exportContainer);
 
-            // 5. Renderizado y descarga de la captura
+            // 5. Breve pausa para asegurar el cálculo de geometrías
+            await new Promise(resolve => setTimeout(resolve, 150));
+
             try {
                 const canvas = await html2canvas(exportContainer, {
                     backgroundColor: '#fecfef',
                     useCORS: true,
-                    allowTaint: true,
+                    allowTaint: false,
                     scale: 2,
                     logging: false,
                     windowWidth: 1280
                 });
 
-                const imageURI = canvas.toDataURL('image/png');
-                const link = document.createElement('a');
-                link.download = `sprite_collection_${filterMode}.png`;
-                link.href = imageURI;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
+                // Descarga mediante Blob
+                if (canvas.toBlob) {
+                    canvas.toBlob((blob) => {
+                        if (!blob) {
+                            alert("Error al generar la imagen.");
+                            return;
+                        }
+                        const url = URL.createObjectURL(blob);
+                        const link = document.createElement('a');
+                        link.download = `sprite_collection_${filterMode}.png`;
+                        link.href = url;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        URL.revokeObjectURL(url);
+                    }, 'image/png');
+                } else {
+                    const imageURI = canvas.toDataURL('image/png');
+                    const link = document.createElement('a');
+                    link.download = `sprite_collection_${filterMode}.png`;
+                    link.href = imageURI;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }
             } catch (err) {
                 console.error("Error generating screenshot:", err);
+                alert("Ocurrió un error al generar la imagen. Si estás abriendo el archivo en local (file://), sube los cambios a tu servidor o GitHub Pages para probar la descarga.");
             } finally {
                 if (document.body.contains(exportContainer)) document.body.removeChild(exportContainer);
                 if (document.body.contains(loadingMsg)) document.body.removeChild(loadingMsg);
