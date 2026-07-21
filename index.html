@@ -300,15 +300,15 @@
             </div>
             <div class="stats-wrapper">
                 <div class="stat-card" style="min-width: 160px;">
-                    <label id="lblEpicId" style="color:var(--text-muted);">Epic Games ID (optional) <img src="epic.webp" alt="Epic" class="icon-small"></label>
+                    <label id="lblEpicId" style="color:var(--text-muted);"><span id="txtEpicIdLabel">Epic Games ID (optional)</span> <img src="epic.webp" alt="Epic" class="icon-small"></label>
                     <input type="text" id="epicIdInput" class="epic-input" placeholder="Enter Epic ID..." oninput="saveToLocalStorage()">
                 </div>
                 <div class="stat-card">
-                    <label id="lblSpriteDust" class="lbl-sprite-dust">Sprite Dust <span style="font-size:9px; color:#94a3b8; font-weight:700;">(⬆/⬇ ±1k)</span> <img src="dust.webp" alt="Dust" class="icon-small"></label>
+                    <label id="lblSpriteDust" class="lbl-sprite-dust"><span id="txtSpriteDustLabel">Sprite Dust</span> <span style="font-size:9px; color:#94a3b8; font-weight:700;">(⬆/⬇ ±1k)</span> <img src="dust.webp" alt="Dust" class="icon-small"></label>
                     <input type="text" class="dust-input" id="dustInput" value="0" oninput="handleDustInput(this)" onkeydown="handleDustKeyDown(event, this)">
                 </div>
                 <div class="stat-card">
-                    <label id="lblDustReq" class="lbl-dust-req">Dust Required <img src="dust.webp" alt="Dust" class="icon-small"></label>
+                    <label id="lblDustReq" class="lbl-dust-req"><span id="txtDustReqLabel">Dust Required</span> <img src="dust.webp" alt="Dust" class="icon-small"></label>
                     <div class="value-required" id="dustRequiredVal">0</div>
                 </div>
             </div>
@@ -353,7 +353,7 @@
             </div>
             <div>
                 <div class="bar-header">
-                    <span id="txtBarMastered" style="color: #b45309; display: flex; align-items: center; gap: 6px;"><img src="crown.webp" alt="👑" class="icon-small"> Mastered Sprites</span>
+                    <span id="txtBarMastered" style="color: #b45309; display: flex; align-items: center; gap: 6px;"><img src="crown.webp" alt="👑" class="icon-small"> <span id="txtBarMasteredText">Mastered Sprites</span></span>
                     <span id="masteredCountText" style="color:#b45309;">0 / 0</span>
                 </div>
                 <div class="progress-bar-container">
@@ -363,7 +363,7 @@
         </div>
 
         <div class="summon-cost-outside-panel">
-            <div id="txtSummonTableTitle" class="summon-panel-title"><img src="dust.webp" alt="Dust" class="icon-small"> Summon Cost Reference Table</div>
+            <div id="txtSummonTableTitle" class="summon-panel-title"><img src="dust.webp" alt="Dust" class="icon-small"> <span id="txtSummonTableTitleText">Summon Cost Reference Table</span></div>
             <div class="summon-info-grid">
                 <div class="summon-column">
                     <div class="summon-info-item" style="color: var(--rarity-rare);"><span id="txtCostRareNorm">Rare Normal</span><span class="cost-val">100 dust</span></div>
@@ -404,9 +404,9 @@
         <button id="btnCopyText" class="gamer-btn btn-text" onclick="copyTextCollection()">📋 Copy Text List</button>
         <button id="btnDownloadImg" class="gamer-btn btn-download" onclick="openExportDialog()">📸 Download Image</button>
 
-        <button id="btnOwnedAll" class="gamer-btn btn-admin-owned" onclick="triggerMassiveAction('own-all')"><img src="green.webp" alt="✅" class="icon-small"> Owned All</button>
-        <button id="btnMasterAll" class="gamer-btn btn-admin-master" onclick="triggerMassiveAction('master-all')"><img src="crown.webp" alt="👑" class="icon-small"> Master All</button>
-        <button id="btnResetAll" class="gamer-btn btn-admin-reset" onclick="triggerMassiveAction('reset-all')"><img src="red.webp" alt="❌" class="icon-small"> Reset All (Missing)</button>
+        <button id="btnOwnedAll" class="gamer-btn btn-admin-owned" onclick="triggerMassiveAction('own-all')"><img src="green.webp" alt="✅" class="icon-small"> <span id="btnOwnedAllText">Owned All</span></button>
+        <button id="btnMasterAll" class="gamer-btn btn-admin-master" onclick="triggerMassiveAction('master-all')"><img src="crown.webp" alt="👑" class="icon-small"> <span id="btnMasterAllText">Master All</span></button>
+        <button id="btnResetAll" class="gamer-btn btn-admin-reset" onclick="triggerMassiveAction('reset-all')"><img src="red.webp" alt="❌" class="icon-small"> <span id="btnResetAllText">Reset All (Missing)</span></button>
     </div>
     
     <div class="content-grid" id="mainLockerGrid"></div>
@@ -462,6 +462,14 @@
     </div>
     
     <script>
+        // Helpers para acceso seguro a almacenamiento local
+        function safeGetStorage(key) {
+            try { return localStorage.getItem(key); } catch (e) { return null; }
+        }
+        function safeSetStorage(key, val) {
+            try { localStorage.setItem(key, val); } catch (e) {}
+        }
+
         const langConfig = {
             en: { bg: '#0a3161', txt: '#ffffff', border: '#ffffff' },
             es: { bg: '#006341', txt: '#ffffff', border: '#ce1126' },
@@ -582,7 +590,7 @@
             }
             document.documentElement.style.setProperty('--card-scale', currentZoomLevel);
             document.getElementById('zoomValText').innerText = `${Math.round(currentZoomLevel * 100)}%`;
-            localStorage.setItem('spriteChecklistZoom', currentZoomLevel.toString());
+            safeSetStorage('spriteChecklistZoom', currentZoomLevel.toString());
         }
 
         function handleDustInput(input) {
@@ -613,11 +621,11 @@
 
             document.getElementById('txtTitle').innerText = t.title;
             document.getElementById('txtSubTitle').innerText = t.subTitle;
-            document.getElementById('lblEpicId').childNodes[0].nodeValue = (t.epicIdTitle || "Epic Games ID (optional)") + " ";
+            document.getElementById('txtEpicIdLabel').innerText = t.epicIdTitle || "Epic Games ID (optional)";
             document.getElementById('epicIdInput').placeholder = t.epicIdPlaceholder;
             
-            document.getElementById('lblSpriteDust').childNodes[0].nodeValue = t.lblSpriteDust + " ";
-            document.getElementById('lblDustReq').childNodes[0].nodeValue = t.lblDustReq + " ";
+            document.getElementById('txtSpriteDustLabel').innerText = t.lblSpriteDust;
+            document.getElementById('txtDustReqLabel').innerText = t.lblDustReq;
             
             document.getElementById('txtInfoTitle').innerText = t.infoTitle;
             document.getElementById('txtKeyLevel').innerText = t.keyLevel;
@@ -634,9 +642,9 @@
             document.getElementById('txtRarityMythic').innerText = t.rarityMythic;
             
             document.getElementById('txtBarCollection').innerText = t.barCollection;
-            document.getElementById('txtBarMastered').childNodes[1].nodeValue = " " + t.barMastered;
+            document.getElementById('txtBarMasteredText').innerText = t.barMastered;
             
-            document.getElementById('txtSummonTableTitle').childNodes[1].nodeValue = " " + t.summonTableTitle;
+            document.getElementById('txtSummonTableTitleText').innerText = t.summonTableTitle;
             document.getElementById('txtCostRareNorm').innerText = t.costRareNorm;
             document.getElementById('txtCostRareVar').innerText = t.costRareVar;
             document.getElementById('txtCostEpicNorm').innerText = t.costEpicNorm;
@@ -654,9 +662,9 @@
             
             document.getElementById('btnCopyText').innerText = t.btnCopyText;
             document.getElementById('btnDownloadImg').innerText = t.btnDownloadImg;
-            document.getElementById('btnOwnedAll').childNodes[1].nodeValue = " " + t.btnOwnedAll;
-            document.getElementById('btnMasterAll').childNodes[1].nodeValue = " " + t.btnMasterAll;
-            document.getElementById('btnResetAll').childNodes[1].nodeValue = " " + t.btnResetAll;
+            document.getElementById('btnOwnedAllText').innerText = t.btnOwnedAll;
+            document.getElementById('btnMasterAllText').innerText = t.btnMasterAll;
+            document.getElementById('btnResetAllText').innerText = t.btnResetAll;
             
             document.getElementById('txtModalLevelTitle').innerText = t.modalLevelTitle;
             document.getElementById('txtModalNeedsSummon').innerText = t.modalNeedsSummon;
@@ -677,7 +685,7 @@
             }
 
             updateAllDynamicText();
-            localStorage.setItem('spriteChecklistLang', langKey);
+            safeSetStorage('spriteChecklistLang', langKey);
             filterLockerView(document.getElementById('viewFilterSelect').value);
         }
 
@@ -726,60 +734,69 @@
                 };
             });
 
-            localStorage.setItem('spriteChecklistData', JSON.stringify(lockerData));
+            safeSetStorage('spriteChecklistData', JSON.stringify(lockerData));
         }
 
         function loadFromLocalStorage() {
-            const savedLang = localStorage.getItem('spriteChecklistLang') || 'en';
+            const savedLang = safeGetStorage('spriteChecklistLang') || 'en';
             document.getElementById('langSelect').value = savedLang;
 
-            const savedZoom = localStorage.getItem('spriteChecklistZoom');
+            const savedZoom = safeGetStorage('spriteChecklistZoom');
             if (savedZoom) {
                 currentZoomLevel = parseFloat(savedZoom);
                 adjustZoom(0);
             }
 
-            const savedData = localStorage.getItem('spriteChecklistData');
+            const savedData = safeGetStorage('spriteChecklistData');
             if (!savedData) {
                 changeLanguage(savedLang);
                 return;
             }
 
-            const lockerData = JSON.parse(savedData);
-            if (lockerData.epicId !== undefined) document.getElementById('epicIdInput').value = lockerData.epicId;
-            if (lockerData.dustValue !== undefined) {
-                document.getElementById('dustInput').value = lockerData.dustValue;
-            } else {
-                document.getElementById('dustInput').value = '0';
-            }
-            
-            const slotsData = lockerData.slots || lockerData;
-            for (const key in slotsData) {
-                const [spriteId, variant] = key.split('_');
-                const card = document.querySelector(`.sprite-card-block[data-sprite-id="${spriteId}"]`);
-                if (card) {
-                    const slot = card.querySelector(`.slot-box[data-variant="${variant}"]`);
-                    if (slot && !slot.classList.contains('unavailable')) {
-                        const item = slotsData[key];
-                        slot.setAttribute('data-owned', item.owned);
-                        slot.setAttribute('data-level', item.level);
-                        slot.setAttribute('data-mastery', item.mastery);
-                        slot.setAttribute('data-summon', item.summon);
+            try {
+                const lockerData = JSON.parse(savedData);
+                if (lockerData.epicId !== undefined) document.getElementById('epicIdInput').value = lockerData.epicId;
+                if (lockerData.dustValue !== undefined) {
+                    document.getElementById('dustInput').value = lockerData.dustValue;
+                } else {
+                    document.getElementById('dustInput').value = '0';
+                }
+                
+                const slotsData = lockerData.slots || lockerData;
+                for (const key in slotsData) {
+                    const [spriteId, variant] = key.split('_');
+                    const card = document.querySelector(`.sprite-card-block[data-sprite-id="${spriteId}"]`);
+                    if (card) {
+                        const slot = card.querySelector(`.slot-box[data-variant="${variant}"]`);
+                        if (slot && !slot.classList.contains('unavailable')) {
+                            const item = slotsData[key];
+                            slot.setAttribute('data-owned', item.owned);
+                            slot.setAttribute('data-level', item.level);
+                            slot.setAttribute('data-mastery', item.mastery);
+                            slot.setAttribute('data-summon', item.summon);
+                        }
                     }
                 }
-            }
+            } catch(e) {}
             changeLanguage(savedLang);
         }
 
-        window.addEventListener('DOMContentLoaded', () => {
+        function initApp() {
             buildLockerGrid();
             loadFromLocalStorage();
             recalculateMetrics();
             filterLockerView('available');
-        });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initApp);
+        } else {
+            initApp();
+        }
         
         function buildLockerGrid() {
             const container = document.getElementById('mainLockerGrid');
+            if (!container) return;
             container.innerHTML = "";
             
             const rarityOrder = { "Rare": 1, "Epic": 2, "Legendary": 3, "Mythic": 4 };
@@ -1261,7 +1278,7 @@
             closeExportDialog();
 
             if (typeof html2canvas === 'undefined') {
-                alert(currentLang === 'es' ? "No se encontró el archivo html2canvas.min.js en el servidor." : "html2canvas.min.js file not found on server.");
+                alert(currentLang === 'es' ? "No se encontró el archivo html2canvas.min.js en la carpeta." : "html2canvas.min.js file not found in folder.");
                 return;
             }
 
