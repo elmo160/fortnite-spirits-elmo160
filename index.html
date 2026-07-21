@@ -182,11 +182,12 @@
         .slot-box.needs-summon:not(.blocked) { border-color: #94a3b8 !important; background: linear-gradient(135deg, #4a5568, #2d3748) !important; }
         .slot-box.needs-summon:not(.blocked) .slot-inner { filter: brightness(0.6) grayscale(0.2) !important; }
         
-        /* Borde Limpio y Delgado para Mastered */
+        /* Borde Limpio para Mastered (Sin brillo interior ni resplandores) */
+        .slot-box.has-crown {
+            border-color: #eab308 !important;
+        }
         .slot-box.has-crown::after {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            border: 2px solid #eab308; border-radius: 3px; pointer-events: none; z-index: 2;
-            box-shadow: inset 0 0 3px rgba(234, 179, 8, 0.4);
+            display: none !important;
         }
 
         .slot-inner { width: 95%; height: 95%; display: flex; align-items: center; justify-content: center; z-index: 1; }
@@ -1273,7 +1274,7 @@
         function openExportDialog() { document.getElementById('exportOverlay').style.display = 'flex'; }
         function closeExportDialog() { document.getElementById('exportOverlay').style.display = 'none'; }
         
-        /* SISTEMA DE CAPTURA HORIZONTAL, SILENCIOSO E INSTANTÁNEO */
+        /* SISTEMA DE CAPTURA HORIZONTAL, MULTILENGUAJE, SILENCIOSO E INSTANTÁNEO */
         async function takeScreenshot(filterMode) {
             closeExportDialog();
 
@@ -1281,6 +1282,8 @@
                 alert(currentLang === 'es' ? "No se encontró el archivo html2canvas.min.js en la carpeta." : "html2canvas.min.js file not found in folder.");
                 return;
             }
+
+            const t = getTranslationDict(currentLang);
 
             // Contenedor fuera de pantalla (horizontal de 1920px)
             const exportContainer = document.createElement('div');
@@ -1293,41 +1296,55 @@
             const colText = document.getElementById('collectionCountText').innerText;
             const mstText = document.getElementById('masteredCountText').innerText;
 
-            // Encabezado mejorado de la captura
+            // Traducciones dinámicas de la captura
+            const translatedTitle = (t.title || "Sprite Checklist").toUpperCase();
+            const translatedDust = t.lblSpriteDust || "Sprite Dust";
+            const translatedDustReq = t.lblDustReq || "Dust Required";
+            const translatedCol = t.barCollection || "Collection";
+            const translatedMst = t.barMastered || "Mastered";
+
+            const legendLvl = t.keyLevel || "Owned / Current Level";
+            const legendMst = t.keyMastered || "Mastered Sprite";
+            const legendMiss = t.keyMissing || "Missing";
+            const legendSummon = t.keyNeedsSummon || "Needs Summon";
+            const legendUnavail = t.keyUnavailable || "Unavailable";
+            const lvlWord = t.levelWord || "Level";
+
+            // Encabezado estilizado sin degradados con recorte (evita el bloque rojo)
             const stats = document.createElement('div');
             stats.style.cssText = 'background:rgba(255,255,255,0.92); border-radius:14px; padding:18px 25px; margin-bottom:20px; border:1px solid rgba(255,255,255,0.7); box-shadow:0 8px 16px rgba(0,0,0,0.06);';
             stats.innerHTML = `
                 <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #e2e8f0; padding-bottom:12px; margin-bottom:12px;">
                     <div>
-                        <h1 style="margin:0; font-size:32px; font-weight:900; background: linear-gradient(45deg, #ff416c, #ff4b2b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing:-0.5px;">SPRITE CHECKLIST</h1>
+                        <h1 style="margin:0; font-size:32px; font-weight:900; color:#ff416c; background:transparent; letter-spacing:-0.5px; font-family:Poppins,sans-serif;">${translatedTitle}</h1>
                         <div style="font-size:14px; font-weight:800; color:#334155; margin-top:2px;">${epicLabel}</div>
                     </div>
                     <div style="display:flex; gap:20px; align-items:center;">
                         <div style="background:#fff; border:1px solid #e2e8f0; padding:6px 14px; border-radius:10px; text-align:center;">
-                            <div style="font-size:9px; font-weight:800; color:#718096; text-transform:uppercase;">Sprite Dust <img src="dust.webp" style="width:12px; vertical-align:middle;"></div>
+                            <div style="font-size:9px; font-weight:800; color:#718096; text-transform:uppercase;">${translatedDust} <img src="dust.webp" style="width:12px; vertical-align:middle;"></div>
                             <div style="font-size:16px; font-weight:800; color:#f472b6;">${dustVal}</div>
                         </div>
                         <div style="background:#fff; border:1px solid #e2e8f0; padding:6px 14px; border-radius:10px; text-align:center;">
-                            <div style="font-size:9px; font-weight:800; color:#718096; text-transform:uppercase;">Dust Required <img src="dust.webp" style="width:12px; vertical-align:middle;"></div>
+                            <div style="font-size:9px; font-weight:800; color:#718096; text-transform:uppercase;">${translatedDustReq} <img src="dust.webp" style="width:12px; vertical-align:middle;"></div>
                             <div style="font-size:16px; font-weight:800; color:#ca9626;">${dustReqVal}</div>
                         </div>
                         <div style="background:#fff; border:1px solid #e2e8f0; padding:6px 14px; border-radius:10px; text-align:center;">
-                            <div style="font-size:9px; font-weight:800; color:#718096; text-transform:uppercase;">Collection</div>
+                            <div style="font-size:9px; font-weight:800; color:#718096; text-transform:uppercase;">${translatedCol}</div>
                             <div style="font-size:16px; font-weight:900; color:#2b6cb0;">${colText}</div>
                         </div>
                         <div style="background:#fff; border:1px solid #e2e8f0; padding:6px 14px; border-radius:10px; text-align:center;">
-                            <div style="font-size:9px; font-weight:800; color:#718096; text-transform:uppercase;">Mastered</div>
+                            <div style="font-size:9px; font-weight:800; color:#718096; text-transform:uppercase;">${translatedMst}</div>
                             <div style="font-size:16px; font-weight:900; color:#b45309;">${mstText}</div>
                         </div>
                     </div>
                 </div>
-                <!-- Guía explicativa integrada -->
+                <!-- Guía explicativa integrada traducida -->
                 <div style="display:flex; gap:20px; align-items:center; font-size:11px; font-weight:700; color:#475569;">
-                    <div style="display:flex; align-items:center; gap:5px;"><span style="background:#fff; border:1px solid #cbd5e1; border-bottom:2px solid #3b82f6; padding:1px 5px; font-size:9px; border-radius:3px; font-style:italic;">Level X</span> Owned</div>
-                    <div style="display:flex; align-items:center; gap:5px;"><img src="crown.webp" style="width:14px;"> Mastered</div>
-                    <div style="display:flex; align-items:center; gap:5px;"><img src="red.webp" style="width:14px;"> Missing</div>
-                    <div style="display:flex; align-items:center; gap:5px;"><span style="background:#4a5568; color:#fff; padding:1px 5px; font-size:9px; border-radius:3px;">Needs Summon</span> Summon Required</div>
-                    <div style="display:flex; align-items:center; gap:5px;"><img src="lock.webp" style="width:12px;"> Unavailable</div>
+                    <div style="display:flex; align-items:center; gap:5px;"><span style="background:#fff; border:1px solid #cbd5e1; border-bottom:2px solid #3b82f6; padding:1px 5px; font-size:9px; border-radius:3px; font-style:italic;">${lvlWord} X</span> ${legendLvl}</div>
+                    <div style="display:flex; align-items:center; gap:5px;"><img src="crown.webp" style="width:14px;"> ${legendMst}</div>
+                    <div style="display:flex; align-items:center; gap:5px;"><img src="red.webp" style="width:14px;"> ${legendMiss}</div>
+                    <div style="display:flex; align-items:center; gap:5px;"><span style="background:#4a5568; color:#fff; padding:1px 5px; font-size:9px; border-radius:3px;">Needs Summon</span> ${legendSummon}</div>
+                    <div style="display:flex; align-items:center; gap:5px;"><img src="lock.webp" style="width:12px;"> ${legendUnavail}</div>
                 </div>
             `;
             exportContainer.appendChild(stats);
