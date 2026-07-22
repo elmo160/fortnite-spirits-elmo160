@@ -119,7 +119,31 @@
             border-radius: 10px; padding: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); 
             display: flex; flex-direction: column; gap: 8px; 
         }
-        .sprite-card-header { display: flex; justify-content: space-between; align-items: center; font-size: 15px; font-weight: 800; color: #0f172a; border-left: 4px solid var(--sprite-rarity, #cbd5e1); padding-left: 6px; }
+		.sprite-card-block { 
+    zoom: var(--card-scale);
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid var(--panel-border);
+    border-radius: 10px;
+    padding: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    display: flex; flex-direction: column; gap: 8px;
+    position: relative; /* <-- Agrégalo aquí */
+    overflow: hidden;   /* <-- Agrégalo aquí */
+	position: relative;
+    overflow: hidden;
+}
+	/* Línea de neón superior según rareza */
+	.sprite-card-block::after {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		height: 3px;
+		background: var(--sprite-rarity, #38bdf8);
+		box-shadow: 0 0 12px var(--sprite-rarity, #38bdf8);
+	}
+        .sprite-card-header { display: flex; justify-content: space-between; align-items: center; font-size: 15px; font-weight: 800; color: #0f172a; }
         .card-mini-actions { display: flex; gap: 4px; align-items: center; }
         .mini-btn { font-family: inherit; font-size: 11px; width: 24px; height: 24px; border-radius: 5px; cursor: pointer; outline: none; display: inline-flex; justify-content: center; align-items: center; padding: 0; transition: all 0.2s ease; }
         .mini-btn .icon-small { width: 14px; height: 14px; }
@@ -825,25 +849,29 @@
             filterLockerView(document.getElementById('viewFilterSelect').value);
         }
 
-        function updateAllDynamicText() {
-            const t = getTranslationDict(currentLang);
-            
-            document.querySelectorAll('.sprite-card-block').forEach(card => {
-                const sId = card.getAttribute('data-sprite-id');
-                const translatedName = (t.spirits && t.spirits[sId]) ? t.spirits[sId] : card.getAttribute('data-sprite-name');
-                const headerTitle = card.querySelector('.sprite-card-header span');
-                if (headerTitle) headerTitle.innerText = translatedName;
+			function updateAllDynamicText() {
+				const t = getTranslationDict(currentLang);
+    
+				document.querySelectorAll('.sprite-card-block').forEach(card => {
+					const sId = card.getAttribute('data-sprite-id');
+					const translatedName = (t.spirits && t.spirits[sId]) ? t.spirits[sId] : card.getAttribute('data-sprite-name');
+        
+					// Actualiza el texto manteniendo el punto intacto
+					const headerTitle = card.querySelector('.sprite-card-header .sprite-name-text');
+					if (headerTitle) {
+						headerTitle.innerText = translatedName;
+					}
 
-                card.querySelectorAll('.slot-box').forEach(slot => {
-                    const variant = slot.getAttribute('data-variant');
-                    const vTag = slot.querySelector('.variant-tag');
-                    if (vTag && variant) {
-                        vTag.innerText = (t.variants && t.variants[variant]) ? t.variants[variant] : (variant === "Holo" ? "Holofoil" : variant);
-                    }
-                    refreshSlotDOM(slot);
-                });
-            });
-        }
+					card.querySelectorAll('.slot-box').forEach(slot => {
+						const variant = slot.getAttribute('data-variant');
+						const vTag = slot.querySelector('.variant-tag');
+						if (vTag && variant) {
+							vTag.innerText = (t.variants && t.variants[variant]) ? t.variants[variant] : (variant === "Holo" ? "Holofoil" : variant);
+						}
+						refreshSlotDOM(slot);
+					});
+				});
+			}
 
         function saveToLocalStorage() {
             const lockerData = {
@@ -947,9 +975,9 @@
                 card.style.setProperty('--sprite-rarity', `var(--rarity-${sprite.rarity.toLowerCase()})`);
                 
                 card.innerHTML = `
-                    <div class="sprite-card-header">
-                        <span>${sprite.name}</span>
-                        <div class="card-mini-actions">
+					<div class="sprite-card-header">
+						<span><span style="width:8px; height:8px; border-radius:50%; background:var(--sprite-rarity); display:inline-block; margin-right:6px; flex-shrink:0;"></span><span class="sprite-name-text">${sprite.name}</span></span>
+							<div class="card-mini-actions">
                             <button class="mini-btn mini-btn-own" title="Owned All" onclick="triggerCardAction('${sprite.id}', 'own-all')"><img src="green.webp" alt="✅" class="icon-small"></button>
                             <button class="mini-btn mini-btn-master" title="Master All" onclick="triggerCardAction('${sprite.id}', 'master-all')"><img src="crown.webp" alt="👑" class="icon-small"></button>
                             <button class="mini-btn mini-btn-reset" title="Reset All (Missing)" onclick="triggerCardAction('${sprite.id}', 'reset-all')"><img src="red.webp" alt="❌" class="icon-small"></button>
