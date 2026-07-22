@@ -43,10 +43,10 @@
         .lang-select { font-family: 'Poppins', sans-serif; padding: 5px 12px; border-radius: 16px; border: 2px solid #ffffff; font-size: 11px; font-weight: 800; cursor: pointer; outline: none; transition: all 0.3s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         
         .hero-header { background: var(--panel-bg); border: 1px solid var(--panel-border); border-radius: 12px; padding: 18px 22px; display: flex; flex-direction: column; gap: 15px; backdrop-filter: blur(12px); margin-bottom: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); }
-        .header-top-zone { display: flex; justify-content: space-between; align-items: center; }
+        .header-top-zone { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
         .brand-zone h1 { margin: 0; font-size: 44px; font-weight: 900; letter-spacing: -0.5px; background: linear-gradient(45deg, #ff416c, #ff4b2b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .brand-zone p { margin: 4px 0 0 0; font-size: 12px; color: #2d3748; font-weight: 600; }
-        .stats-wrapper { display: flex; gap: 10px; align-items: center; }
+        .stats-wrapper { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
         .stat-card { background: rgba(255, 255, 255, 0.55); border: 1px solid rgba(255, 255, 255, 0.7); padding: 10px 14px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); display: flex; flex-direction: column; gap: 4px; backdrop-filter: blur(8px); }
         .stat-card label { display: flex; align-items: center; gap: 6px; font-size: 10px; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px; }
         .dust-input, .epic-input { font-family: 'Poppins', sans-serif; background: rgba(255, 255, 255, 0.8); border: 1px solid #cbd5e1; font-size: 14px; font-weight: 700; border-radius: 6px; padding: 5px 10px; outline: none; }
@@ -73,7 +73,6 @@
         .info-lock-box { width: 22px; height: 22px; background: #2d3748; border: 1px solid #cbd5e1; border-radius: 4px; display: flex; align-items: center; justify-content: center; position: relative; }
         
         .mid-row-container { display: grid; grid-template-columns: 500px 1fr; gap: 12px; margin-bottom: 12px; align-items: stretch; }
-        @media (max-width: 1024px) { .mid-row-container { grid-template-columns: 1fr; } }
 
         .collection-summer-container { background: var(--panel-bg); border: 1px solid var(--panel-border); border-radius: 12px; padding: 16px 24px; display: flex; flex-direction: column; justify-content: center; gap: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); backdrop-filter: blur(12px); }
         .collection-summer-container > div { display: flex; flex-direction: column; align-items: center; width: 100%; }
@@ -139,7 +138,6 @@
             box-shadow: 0 0 12px var(--sprite-rarity, #38bdf8);
         }
 
-        /* 1. Nombres de espíritus en blanco brillante */
         .sprite-card-header { display: flex; justify-content: space-between; align-items: center; font-size: 15px; font-weight: 800; color: #f8fafc; }
         .card-mini-actions { display: flex; gap: 4px; align-items: center; }
         .mini-btn { font-family: inherit; font-size: 11px; width: 24px; height: 24px; border-radius: 5px; cursor: pointer; outline: none; display: inline-flex; justify-content: center; align-items: center; padding: 0; transition: all 0.2s ease; }
@@ -177,7 +175,6 @@
         }
         .slot-box:not(.blocked):not(.unavailable):not(.invisible-space):hover { transform: scale(1.04); z-index: 2; border-color: #2b6cb0; }
         
-        /* PLAQUITA / BADGE DE VARIANTES */
         .variant-tag {
             position: absolute;
             top: 3px;
@@ -194,7 +191,6 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
         }
 
-        /* Colores de variant-tag */
         .slot-box[data-rarity-origin="Rare"] .variant-tag { background: var(--rarity-rare); }
         .slot-box[data-rarity-origin="Epic"] .variant-tag { background: var(--rarity-epic); }
         .slot-box[data-rarity-origin="Legendary"] .variant-tag { background: var(--rarity-legendary); }
@@ -207,7 +203,6 @@
         .slot-box[data-variant="Cube"] .variant-tag { background: #9333ea !important; color: #ffffff !important; }
         .slot-box[data-variant="Quack"] .variant-tag { background: #b87cf8 !important; color: #ffffff !important; }
 
-        /* Fondos y bordes de variantes */
         .slot-box[data-owned="true"][data-variant="Gold"]:not(.blocked) { background: var(--bg-variant-gold); border-color: #ffb300; }
         .slot-box[data-owned="true"][data-variant="Gummy"]:not(.blocked) { background: var(--bg-variant-gummy); border-color: #ec4899; }
         .slot-box[data-owned="true"][data-variant="Galaxy"]:not(.blocked) { background: var(--bg-variant-galaxy); border-color: #bf55ec; color: white; }
@@ -216,7 +211,6 @@
         .slot-box[data-owned="true"][data-variant="Cube"]:not(.blocked) { background: var(--bg-variant-cube); border-color: #9333ea; color: white; }
         .slot-box[data-owned="true"][data-variant="Quack"]:not(.blocked) { background: var(--bg-variant-quack); border-color: #b87cf8; }
         
-        /* Fondos Normales con Gradientes Específicos por Rareza */
         .slot-box[data-owned="true"][data-variant="Normal"][data-rarity-origin="Rare"]:not(.blocked) { background: linear-gradient(135deg, #ffffff 0%, #38bdf8 45%, #0284c7 100%) !important; border-color: var(--rarity-rare); }
         .slot-box[data-owned="true"][data-variant="Normal"][data-rarity-origin="Epic"]:not(.blocked) { background: linear-gradient(135deg, #ffffff 0%, #c084fc 45%, #7e22ce 100%) !important; border-color: var(--rarity-epic); }
         .slot-box[data-owned="true"][data-variant="Normal"][data-rarity-origin="Legendary"]:not(.blocked) { background: linear-gradient(135deg, #ffffff 0%, #ffb74d 45%, #e65100 100%) !important; border-color: var(--rarity-legendary); }
@@ -226,7 +220,6 @@
 
         .slot-box.unavailable:not(.show-all-placeholder) { display: none !important; }
         
-        /* 3. Cuadros de variantes que no existen (false) estilo transparente con borde punteado */
         .slot-box.unavailable.show-all-placeholder { 
             background: transparent !important; 
             border: 1px dashed rgba(255, 255, 255, 0.25) !important; 
@@ -238,7 +231,6 @@
         .slot-box.blocked .slot-inner { opacity: 0.5 !important; filter: none !important; } 
         .blocked-overlay { position: absolute; bottom: 3px; right: 3px; z-index: 5; opacity: 0.8; width: 14px; height: 14px; }
         
-        /* Estado Faltante (Not Owned) */
         .slot-box.not-owned:not(.blocked):not(.unavailable) { 
             background: #222533 !important; 
             border-color: #3b4259 !important; 
@@ -247,7 +239,6 @@
             opacity: 0.3 !important; 
         }
 
-        /* Fondo y Oscurecido para Need Summon */
         .slot-box.needs-summon:not(.blocked) { 
             border-color: #f59e0b !important; 
             background: #1e293b !important; 
@@ -256,7 +247,6 @@
             opacity: 0.3 !important; 
         }
 
-        /* Ícono de Equis para Missing */
         .missing-overlay { 
             position: absolute; 
             top: 50%; 
@@ -273,7 +263,6 @@
         .slot-box.blocked .missing-overlay,
         .slot-box.unavailable .missing-overlay { display: none !important; }
 
-        /* Ícono de Polvo para Need Summon */
         .summon-overlay { 
             position: absolute; 
             top: 50%; 
@@ -290,11 +279,9 @@
         .slot-box.blocked .summon-overlay,
         .slot-box.unavailable .summon-overlay { display: none !important; }
         
-        /* Fondo para Need Summon */
         .slot-box.needs-summon:not(.blocked) { border-color: #f59e0b !important; background: linear-gradient(135deg, #334155, #1e293b) !important; }
         .slot-box.needs-summon:not(.blocked) .slot-inner { filter: brightness(0.5) grayscale(0.3) !important; }
 
-        /* Corona */
         .mini-crown { 
             position: absolute; 
             top: 2px; 
@@ -309,7 +296,6 @@
         .slot-box.has-crown .mini-crown { display: block; }
         .slot-box.has-crown { border-color: #eab308 !important; }
 
-        /* Imágenes */
         .slot-inner { 
             position: absolute;
             top: 0;
@@ -328,7 +314,6 @@
             object-fit: cover; 
         }
 
-        /* ESTRUCTURA BASE DE BADGES */
         .level-badge { 
             position: absolute; 
             z-index: 3; 
@@ -338,7 +323,6 @@
             box-sizing: border-box;
         }
 
-        /* ESTILO ORIGINAL PARA LEVEL (ESQUINA INFERIOR IZQUIERDA) */
         .level-badge-normal { 
             bottom: 0px !important; 
             left: 0px !important; 
@@ -357,7 +341,6 @@
             letter-spacing: normal !important;
         }
 
-        /* ESTILO PÍLDORA PERFECTAMENTE CENTRADA PARA CAPTURAS Y WEB */
         .level-badge-missing, .level-badge-summon {
             bottom: 3px !important; 
             left: 0 !important;
@@ -425,6 +408,38 @@
         .export-dialog { font-family: 'Poppins', sans-serif; background: white; padding: 20px; border-radius: 8px; width: 280px; text-align: center; }
         .export-opts { display: flex; flex-direction: column; gap: 6px; margin: 15px 0; }
         .export-opt-btn { font-family: inherit; background: #f7fafc; border: 1px solid #e2e8f0; padding: 8px; border-radius: 6px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 12px; }
+
+        /* ========================================================= */
+        /* --- ESTILOS RESPONSIVOS PARA MOVILES (MAX-WIDTH: 768px) --- */
+        /* ========================================================= */
+        @media (max-width: 768px) {
+            body { padding: 8px; }
+
+            .hero-header { padding: 14px; gap: 12px; }
+            .header-top-zone { flex-direction: column; align-items: center; text-align: center; gap: 12px; }
+            .brand-zone h1 { font-size: 28px; }
+            .brand-zone p { font-size: 11px; }
+
+            .stats-wrapper { width: 100%; justify-content: center; gap: 8px; }
+            .stat-card { flex: 1 1 100%; align-items: center; padding: 8px 12px; }
+            .dust-input, .epic-input { width: 100%; box-sizing: border-box; text-align: center; }
+
+            .key-panel { padding: 10px; font-size: 11px; }
+            .key-row { justify-content: center; gap: 10px; }
+
+            .mid-row-container { grid-template-columns: 1fr !important; gap: 10px; }
+            .collection-summer-container { padding: 12px 16px; }
+
+            .summon-cost-outside-panel { padding: 12px; }
+            .summon-info-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 8px 12px; }
+
+            .embedded-action-zone { justify-content: center; gap: 8px; padding: 8px; }
+            .gamer-select { width: 100%; justify-content: center; }
+            .gamer-btn.btn-admin-owned { margin-left: 0; }
+
+            .content-grid { grid-template-columns: 1fr !important; gap: 12px; }
+            .sprite-card-block { padding: 10px; }
+        }
     </style>
 </head>
 <body>
