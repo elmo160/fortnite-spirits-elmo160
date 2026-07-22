@@ -211,8 +211,22 @@
         .blocked-overlay { position: absolute; bottom: 3px; right: 3px; z-index: 5; opacity: 0.8; width: 14px; height: 14px; }
         
         /* Estado Faltante (Not Owned) */
-        .slot-box.not-owned:not(.blocked):not(.unavailable) { background: #222533 !important; border-color: #3b4259 !important; }
-        .slot-box.not-owned:not(.blocked):not(.unavailable) .slot-inner img { filter: brightness(0.5) contrast(1.1) !important; opacity: 0.6 !important; }
+        .slot-box.not-owned:not(.blocked):not(.unavailable) { 
+            background: #222533 !important; 
+            border-color: #3b4259 !important; 
+        }
+        .slot-box.not-owned:not(.blocked):not(.unavailable) .slot-inner img { 
+            opacity: 0.3 !important; /* Oscurece el espíritu tanto en la web como en la captura */
+        }
+
+        /* Fondo y Oscurecido para Need Summon */
+        .slot-box.needs-summon:not(.blocked) { 
+            border-color: #f59e0b !important; 
+            background: #1e293b !important; 
+        }
+        .slot-box.needs-summon:not(.blocked) .slot-inner img { 
+            opacity: 0.3 !important; /* Oscurece el espíritu tanto en la web como en la captura */
+        }
 
         /* Ícono de Equis para Missing */
         .missing-overlay { 
